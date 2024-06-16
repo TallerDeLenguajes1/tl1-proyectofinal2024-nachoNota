@@ -4,10 +4,16 @@ using System.Threading.Tasks;
 using LlamadaAPI;
 
 var ListaNombresDescripciones = await APICLIENT.GetCharactersAsync();
-List<Datos> ListaDatosPersonajes = new List<Datos>(); 
 
-//Creo una lista con los datos de cada personaje (Nombre y Descripcion)
+//Creo personajes con sus datos y caracteristicas y hago lista que los contenga
+var Fabrica = new FabricaDePersonajes();
+var ListaDePersonajes = new List<Personaje>();
 foreach (var Personaje in ListaNombresDescripciones.data.Resultados)
 {
-    if(Personaje.Descripcion != "") ListaDatosPersonajes.Add(new Datos(Personaje.Nombre, Personaje.Descripcion));
+    if(Personaje.Descripcion != "")
+    {        
+        var PersonajeCreado = Fabrica.CrearPersonaje(new Datos(Personaje.Nombre, Personaje.Descripcion));
+        ListaDePersonajes.Add(PersonajeCreado);
+        Fabrica.MostrarPersonaje(PersonajeCreado); 
+    } 
 }
