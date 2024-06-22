@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LlamadaAPI;
+
 
 Console.Clear();
 Random rdm = new Random(); //Para seleccionar personajes al azar
@@ -48,7 +48,7 @@ Console.Clear();
 int opcion_personaje = 0;
 opcion_valida = false;
 Texto.MostrarPersonajes(ListaDePersonajes);
- 
+
 while (!opcion_valida)
 {
     Console.WriteLine("Con qué personaje quiere pelear? (ingresar su numero): ");
@@ -67,7 +67,7 @@ while (!opcion_valida)
 Console.Clear();
 
 Personaje PersonajeElegido = ListaDePersonajes[opcion_personaje - 1];
-Console.WriteLine($"MUY BIEN! El personaje elegido es: ");
+Console.WriteLine($"\nMUY BIEN! El personaje elegido es: ");
 Texto.MostrarPersonaje(PersonajeElegido, opcion_personaje);
 ListaDePersonajes.Remove(PersonajeElegido);
 
@@ -89,12 +89,23 @@ switch (opcion_menu)
 
             Console.Clear();
 
-            
+            Console.WriteLine("\nComienza el combate!!!");
+
+            await Task.Delay(2000);
+
+            Console.Clear();
+        
+            while (PersonajeElegido.CaracteristicasPersonaje.Salud > 0 && PersonajeACombatir.CaracteristicasPersonaje.Salud > 0)
+            {
+                
+            }
+        
         break;
-    case 2:
+    case 2: 
+            await Task.Delay(5000);
+            
         break;
     case 3: Console.WriteLine("\nEsperamos que vuelvas a jugar pronto, suerte!");
             await Task.Delay(3000);
         break;
-    default:break;
 }

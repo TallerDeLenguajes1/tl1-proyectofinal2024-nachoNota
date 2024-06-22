@@ -6,17 +6,6 @@ public class FabricaDePersonajes()
         var Caracteristicas = new Caracteristicas();
         return new Personaje(datos, Caracteristicas);
     }
-
-    public void MostrarPersonaje(Personaje personaje)
-    {
-        Console.WriteLine($"Nombre: {personaje.DatosPersonaje.Nombre}\n" +
-                        $"Descripcion: {personaje.DatosPersonaje.Descripcion}\n" +
-                        $"Salud: {personaje.CaracteristicasPersonaje.Salud}\n" +
-                        $"Mana: {personaje.CaracteristicasPersonaje.Mana}\n" +
-                        $"Daño: {personaje.CaracteristicasPersonaje.Daño}\n" +
-                        $"Defensa: {personaje.CaracteristicasPersonaje.Defensa}");
-        Console.WriteLine("===========================================");
-    }
 }
 
 public class Personaje
