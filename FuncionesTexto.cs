@@ -19,7 +19,9 @@ public class FuncionesTexto
                           "|                       |\r\n" +
                           "|  1- Comenzar nuevo    |\r\n" +
                           "|     torneo            |\r\n" +
+                          "|                       |\r\n" +
                           "|  2- Combate 1v1       |\r\n" +
+                          "|                       |\r\n" +
                           "|  3- Salir             |\r\n" +
                           "+-----------------------+\r\n");
 
@@ -35,7 +37,7 @@ public class FuncionesTexto
                             $"| Mana:     {personaje.CaracteristicasPersonaje.Mana}\n" +
                             $"| Daño:     {personaje.CaracteristicasPersonaje.Daño}\n" +
                             $"| Defensa:  {personaje.CaracteristicasPersonaje.Defensa}");
-        CentrarTexto($"└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
+        CentrarTexto($"└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
 
     }
 
