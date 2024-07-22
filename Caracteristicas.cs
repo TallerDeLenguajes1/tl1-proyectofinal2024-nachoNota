@@ -71,4 +71,30 @@ public class Caracteristicas
         }
     }
 
+    public void ReestablecerEstadisticas()
+    {
+        salud = valorBase;
+        mana = valorBase;
+    }
+
+    public void SubirNivel(int nivelesASubir)
+    {
+        ReestablecerEstadisticas();
+        for(int i = 0; i < nivelesASubir; i++)
+        {
+            nivel++;
+            valorBase += 10;
+
+            salud = valorBase;
+            mana = valorBase;
+
+            agilidad += GenerarAleatorio(4, 7);
+            fuerza += GenerarAleatorio(2, 5);
+            precision += GenerarAleatorio(2, 5);
+            resistencia += GenerarAleatorio(4, 7); 
+        }
+        defensa = CalcularDefensa();
+        daño = CalcularDaño();
+    }
+
 }
