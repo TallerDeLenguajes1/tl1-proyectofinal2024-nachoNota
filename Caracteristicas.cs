@@ -2,63 +2,73 @@ using System;
 
 public class Caracteristicas
 {
+    private int valorBase {  get; set; }
     private int salud { get; set; }
     private int daño { get; set; }
     private int defensa { get; set; }
     private int mana { get; set; }
-    private List<Especial> especiales { get; set; }
+    private int nivel { get; set; }
+    private int agilidad { get; set; }
+    private int fuerza { get; set; }
+    private int precision { get; set; }
+    private int resistencia { get; set; }
 
     public int Salud { get => salud; set => salud = value; }
     public int Daño { get => daño; set => daño = value; }
     public int Defensa { get => defensa; set => defensa = value; }
     public int Mana { get => mana; set => mana = value; }
-    public List<Especial> Especiales { get => especiales; set => especiales = value; }
+    public int Nivel { get => nivel; set => nivel = value; }
+    public int Agilidad { get => agilidad; set => agilidad = value; }
+    public int Fuerza { get => fuerza; set => fuerza = value; }
+    public int Precision { get => precision; set => precision = value; }
+    public int Resistencia { get => resistencia; set => resistencia = value; }
 
     public Caracteristicas()
     {
-        Salud = 100;
-        Mana = 100;
-        Daño = GenerarAleatorio();
-        Defensa = GenerarAleatorio();
-        Especiales = new List<Especial>
+        valorBase = 100;
+        salud = valorBase;
+        mana = valorBase;
+        nivel = 1;
+        agilidad = GenerarAleatorio(12, 19);
+        fuerza = GenerarAleatorio(15, 24);
+        precision = GenerarAleatorio(21, 26);
+        resistencia = GenerarAleatorio(10, 20);
+        defensa = CalcularDefensa();
+        daño = CalcularDaño(); 
+    }
+
+    public int GenerarAleatorio(int min, int max)
+    {
+        return new Random().Next(min, max);
+    }
+
+    public int CalcularDaño()
+    {
+        int dañoBase = 10;
+        double multiplicadorFuerza = 0.35;
+        double multiplicadorAgilidad = 0.2;
+        double multiplicadorPrecision = 0.1;
+        int componenteAleatorio = GenerarAleatorio(1, 4);
+
+        return (int)(dañoBase + (fuerza * multiplicadorFuerza) + (agilidad * multiplicadorAgilidad) + (precision * multiplicadorPrecision) + componenteAleatorio);
+    }
+
+    public int CalcularDefensa()
+    {
+        int defensaBase = 12;
+        double multiplicadorAgilidad = 0.4;
+        double multiplicadorResistencia = 0.6;
+        int componenteAleatorio = GenerarAleatorio(1, 4);
+        return (int)(defensaBase + (agilidad * multiplicadorAgilidad) + (resistencia * multiplicadorResistencia) + componenteAleatorio);
+    }
+
+    public void BalancearEstadisticas()
+    {
+        if(daño <= 23 && defensa <= 26)
         {
-            new Especial("Curacion", "+25 de Salud (-50 de Mana)", 0, 0, 25),
-            new Especial("Proteccion Divina", "+25 de Defensa (-50 de Mana)", 0, 25, 0),
-            new Especial("Corte Profundo", "25 de daño (-50 de Mana)", 25, 0, 0)
-        };
+            daño += 2;
+            defensa += 3;
+        }
     }
 
-    Random rdm = new Random();
-
-    public int GenerarAleatorio()
-    {
-        return rdm.Next(10, 20);
-    }
-
-}
-
-public class Especial
-{
-    private string nombre { get; set; }
-    private string descripcion {  get; set; }
-    private int daño {  get; set; }
-    private int defensa { get; set; }
-    private int salud { get; set; }
-    private int costoMana { get; set; }
-
-    public string Nombre { get => nombre; set => nombre = value; }
-    public string Descripcion { get => descripcion; set => descripcion = value; }
-    public int Daño { get => daño; set => daño = value; }
-    public int Defensa { get => defensa; set => defensa = value; }
-    public int Salud { get => salud; set => salud = value; }
-    public int CostoMana { get => costoMana; set => costoMana = value; }
-
-    public Especial(string Nombre, string Descripcion, int Daño, int Defensa, int Salud)
-    {
-        this.Nombre = Nombre;
-        this.Descripcion = Descripcion;
-        this.Daño = Daño;
-        this.Defensa = Defensa;
-        CostoMana = 50;
-    }
 }
