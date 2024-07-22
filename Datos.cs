@@ -8,9 +8,10 @@ public class Datos
 	public string Nombre { get => nombre; set => nombre = value; }
     public string Descripcion { get => descripcion; set => descripcion = value; }
 
-	public Datos(string Nombre, string Descripcion){
-		this.Nombre = Nombre;
-		this.Descripcion = Descripcion;
+	public Datos(string nombre, string descripcion){
+		this.nombre = nombre;
+		this.descripcion = descripcion;
 	}
 
 }
+
