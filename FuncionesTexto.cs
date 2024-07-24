@@ -1,6 +1,9 @@
 using System;
+using MovimientosCombate;
+using MiProyecto.FabricaDePersonajes;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 public class FuncionesTexto
 {
@@ -35,8 +38,38 @@ public class FuncionesTexto
         "(__)(__)(__)  (__)(./  \\.) (__)__)  (__) (__)   (__)   (_\")  (_/ "
         };
         
-        //Console.WriteLine("   ____     _      __  __    ____   U _____ u U  ___ u  _   _    \r\nU /\"___|U  /\"\\  uU|' \\/ '|uU|  _\"\\ u\\| ___\"|/  \\/\"_ \\/ | \\ |\"|   \r\n\\| | u   \\/ _ \\/ \\| |\\/| |/\\| |_) |/ |  _|\"    | | | |<|  \\| |>  \r\n | |/__  / ___ \\  | |  | |  |  __/   | |___.-,_| |_| |U| |\\  |u  \r\n  \\____|/_/   \\_\\ |_|  |_|  |_|      |_____|\\_)-\\___/  |_| \\_|   \r\n _// \\\\  \\\\    >><<,-,,-.   ||>>_    <<   >>     \\\\    ||   \\\\,-.\r\n(__)(__)(__)  (__)(./  \\.) (__)__)  (__) (__)   (__)   (_\")  (_/ ");
         CentrarLineas(campeonLineas);
+    }
+
+    public void CartelCampeones()
+    {
+        string[] campeonesLineas =
+        {
+        " _  ____                                                 _ ",
+        "| |/ ___|__ _ _ __ ___  _ __   ___  ___  _ __   ___  ___| |",
+        "| | |   / _` | '_ ` _ \\| '_ \\ / _ \\/ _ \\| '_ \\ / _ \\/ __| |",
+        "| | |__| (_| | | | | | | |_) |  __/ (_) | | | |  __/\\__ \\ |",
+        "| |\\____\\__,_|_| |_| |_| .__/ \\___|\\___/|_| |_|\\___||___/ |",
+        "|_|                    |_|                              |_|"
+    };
+
+        CentrarLineas(campeonesLineas);
+    }
+
+
+    public void MostrarCampeones(string nombreArchivo)
+    {
+        var helperJson = new HelperJson();
+        string stringjson = helperJson.AbrirArchivo(nombreArchivo);
+
+        var listaCampeones = JsonSerializer.Deserialize<List<Personaje>>(stringjson);
+
+        CartelCampeones();
+        Console.WriteLine("\n");
+        foreach(var campeon in listaCampeones)
+        {
+            MostrarPersonaje(campeon);
+        }
     }
 
     public async Task FraseIntroduccionCombate(Personaje atacante, Personaje oponente)
@@ -189,4 +222,3 @@ public class FuncionesTexto
         }
     }
 }
-
