@@ -79,24 +79,28 @@ namespace CaracteristicasPersonaje
             mana = valorBase;
         }
 
-        public void SubirNivel(int nivelesASubir)
+        public void SubirNivelOponente()
+        {
+            nivel++;
+
+            salud += 10;
+            mana += 5;
+
+            agilidad += GenerarAleatorio(4, 7);
+            fuerza += GenerarAleatorio(2, 5);
+            precision += GenerarAleatorio(2, 5);
+            
+            daño = CalcularDaño();
+        }
+
+        public void SubirEstadisticasJugador()
         {
             ReestablecerEstadisticas();
-            for(int i = 0; i < nivelesASubir; i++)
-            {
-                nivel++;
-                valorBase += 10;
 
-                salud = valorBase;
-                mana = valorBase;
+            valorBase += 10;
 
-                agilidad += GenerarAleatorio(4, 7);
-                fuerza += GenerarAleatorio(2, 5);
-                precision += GenerarAleatorio(2, 5);
-                resistencia += GenerarAleatorio(4, 7); 
-            }
-            defensa = CalcularDefensa();
-            daño = CalcularDaño();
+            mana = valorBase;
+            precision += 5;
         }
     }
 }
