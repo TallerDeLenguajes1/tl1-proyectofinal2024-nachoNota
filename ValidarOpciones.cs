@@ -1,4 +1,6 @@
 using System;
+using MovimientosCombate;
+
 
 public class ValidarOpciones
 {
