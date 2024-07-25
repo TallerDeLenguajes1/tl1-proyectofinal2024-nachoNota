@@ -17,7 +17,7 @@ public class ValidarOpciones
             }
             else
             {
-                Console.WriteLine($"Por favor, ingrese un n�mero v�lido entre 1 y {max}.\n");
+                Console.WriteLine($"Por favor, ingrese un número válido entre 1 y {max}.\n");
             }
         }
 
@@ -40,7 +40,7 @@ public class ValidarOpciones
             }
             else
             {
-                Console.WriteLine($"Por favor, ingrese un n�mero v�lido, ya sea 0 o 1.");
+                Console.WriteLine($"Por favor, ingrese un número válido, ya sea 0 o 1.");
             }
         }
         return opcion;
@@ -61,7 +61,7 @@ public class ValidarOpciones
                 opcionValida = true;
             } else
             {
-                Console.WriteLine($"Por favor, ingrese un n�mero v�lido entre 1 y {movimientosClaves.Count}");
+                Console.WriteLine($"Por favor, ingrese un número válido entre 1 y {movimientosClaves.Count}");
             }
         }
         return (opcion, movimientosClaves[opcion]);
