@@ -210,6 +210,22 @@ do
                     await Texto.AnunciarGanador(Oponente, PersonajeElegido);
                 }
                 break;
+            case 3:
+                string NombreArchivo = "CampeonesHistoricos.json";
+                string rutaCompleta = Path.GetFullPath(NombreArchivo);
+                
+                if (!File.Exists(rutaCompleta))
+                {
+                    Console.WriteLine("\n\nTodavia no tienes ningun campeón dentro de esta lista, prueba jugando nuestra modalidad de torneo para grabar el nombre de tus campeones en este sector!");
+                } else
+                {
+                    Texto.MostrarCampeones(NombreArchivo);
+                }
+
+                Console.Write("\n\nPresione cualquier tecla para salir...");
+                Console.ReadKey();
+
+                break;
         }
     }
     else
