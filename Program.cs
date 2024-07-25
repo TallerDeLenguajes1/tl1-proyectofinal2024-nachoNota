@@ -156,6 +156,59 @@ do
 
                 break;
             case 2:
+                Texto.MostrarPersonajes(ListaDePersonajes);
+                Console.Write("Con qué personaje quiere pelear? (ingresar su numero): ");
+                opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
+
+                Console.Clear();
+
+                PersonajeElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+                Console.WriteLine($"\nMUY BIEN! El personaje elegido es: \n");
+                Texto.MostrarPersonaje(PersonajeElegido);
+                await Task.Delay(4000);
+
+                Console.Clear();
+
+                Console.WriteLine("\nQuieres elegir tu propio Oponente o elegir uno al azar? 0 = Elegir propio, 1 = Al azar\n");
+                int OpcionOponente = Valid.ValidarOponente();
+
+                Console.Clear();
+
+                if (OpcionOponente == 1)
+                {
+                    Console.WriteLine("\nTu rival es...\n");
+                    await Task.Delay(2000);
+                    Oponente = Fabrica.PersonajeAlAzar(ListaDePersonajes);
+                }
+                else
+                {
+                    Texto.MostrarPersonajes(ListaDePersonajes);
+                    Console.Write("Contra qué personaje quiere pelear? (ingresar su numero): ");
+                    opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
+
+                    Console.Clear();
+                    Oponente = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+                    Console.WriteLine($"\nMUY BIEN! Tu oponente en este caso será: \n");
+                }
+                Texto.MostrarPersonaje(Oponente);
+                await Task.Delay(4000);
+
+                Console.Clear();
+
+                await Texto.FraseIntroduccionCombate(PersonajeElegido, Oponente);
+
+                Console.Clear();
+
+                await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+
+                if (Combate.EsGanador(PersonajeElegido))
+                {
+                    await Texto.AnunciarGanador(PersonajeElegido, Oponente);
+                }
+                else
+                {
+                    await Texto.AnunciarGanador(Oponente, PersonajeElegido);
+                }
                 break;
         }
     }
