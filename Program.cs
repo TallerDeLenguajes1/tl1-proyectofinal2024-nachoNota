@@ -103,7 +103,13 @@ do
                         //await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
                         if (Combate.EsGanador(PersonajeElegido))
                         {
-                            
+                            Texto.MensajeCampeon();
+                            Console.WriteLine("\n\n");
+                            await Texto.EscribirTextoAsync($"EN SERIO???? TE PUSE A MI MEJOR PELEADOR Y NO PUDO HACERTE NADA???");
+                            await Task.Delay(1000);
+                            await Texto.EscribirTextoAsync($" Bueno, supongo que tu nombre, {PersonajeElegido.Datos.Nombre}, merece estar en nuestro listado de campeones historicos.");
+                            Combate.GuardarCampeon("CampeonesHistoricos.json", PersonajeElegido);
+                            await Task.Delay(2000);
                         }
                         else
                         {
