@@ -4,10 +4,10 @@ using System.Text.Json;
 public class DatosRaiz
 {
     [JsonPropertyName("results")]
-    public List<DatosPersonaje> Resultados { get; set; }
+    public List<Resultados> Resultados { get; set; }
 }
 
-public class DatosPersonaje
+public class Resultados
 {
     [JsonPropertyName("name")]
     public string Nombre { get; set; }
@@ -29,7 +29,7 @@ public class APICLIENT
         string publicKey = "650b489211f65652098aedd5afbb79bf";
         string hash = "abde502c3b8786278606247295cf4767";
         string baseUrl = "https://gateway.marvel.com:443/v1/public/";
-
+        
         try
         {
             HttpClient client = new HttpClient();
