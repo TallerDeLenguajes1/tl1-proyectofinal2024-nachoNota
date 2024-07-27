@@ -25,7 +25,6 @@ do
     Console.Write(Texto.CentrarLinea("Elija una de las opciones: "));
     OpcionMenu = Valid.ValidarOpcion(4);
 
-    Console.Clear();
     if(OpcionMenu != 4)
     {
         //Creo personajes con sus datos y caracteristicas y hago lista que los contenga

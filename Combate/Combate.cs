@@ -101,7 +101,7 @@ namespace VentanaCombate
                             case 1: BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
                                 break;
                             case 2:
-                                AumentarDefensa(Oponente, MovimientosPorClave[3]);
+                                AumentarDefensa(Oponente, MovimientosPorClave[3]); //+8
                                 break;
                         }
                     }
@@ -112,7 +112,7 @@ namespace VentanaCombate
                             case 0:
                             case 1: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]);
+                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -126,7 +126,7 @@ namespace VentanaCombate
                                 break;
                             case 1: BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[3]);
+                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[3]); //+8
                                 break;
                         }
                     } else if(Oponente.Caracteristicas.Mana >= 40)
@@ -136,7 +136,7 @@ namespace VentanaCombate
                             case 0:
                             case 1: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]);
+                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -154,9 +154,9 @@ namespace VentanaCombate
                                 break;
                             case 1: BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
                                 break;
-                            case 2: AumentarSalud(Oponente, MovimientosPorClave[5]);
+                            case 2: AumentarSalud(Oponente, MovimientosPorClave[5]); //+25
                                 break;
-                            case 3: AumentarSalud(Oponente, MovimientosPorClave[6]);
+                            case 3: AumentarSalud(Oponente, MovimientosPorClave[6]); //+15
                                 break;
                         }
                     } else if(Oponente.Caracteristicas.Mana >= 30)
@@ -165,9 +165,9 @@ namespace VentanaCombate
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 1: AumentarSalud(Oponente, MovimientosPorClave[6]);
+                            case 1: AumentarSalud(Oponente, MovimientosPorClave[6]); //+15
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]);
+                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -194,10 +194,10 @@ namespace VentanaCombate
                             {
                                 if (Oponente.Caracteristicas.Mana >= 40)
                                 {
-                                    AumentarSalud(Oponente, MovimientosPorClave[5]);
+                                    AumentarSalud(Oponente, MovimientosPorClave[5]); //+25
                                 } else
                                 {
-                                    AumentarSalud(Oponente, MovimientosPorClave[6]);
+                                    AumentarSalud(Oponente, MovimientosPorClave[6]); //+15
                                 }
                             }
                             else
