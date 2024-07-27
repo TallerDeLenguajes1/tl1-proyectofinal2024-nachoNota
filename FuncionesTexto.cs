@@ -68,6 +68,7 @@ public class FuncionesTexto
         Console.WriteLine("\n");
         foreach(var campeon in listaCampeones)
         {
+            Console.WriteLine($"Se consagró victorioso el {campeon.FechaCampeon.ToString("dd/MM/yy")} a las {campeon.FechaCampeon.ToString("HH:mm tt")}");
             MostrarPersonaje(campeon);
         }
     }

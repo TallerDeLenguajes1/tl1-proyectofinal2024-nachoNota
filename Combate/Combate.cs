@@ -83,18 +83,18 @@ namespace VentanaCombate
 
         public void TurnoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> MovimientosPorClave)
         {
-            if(Oponente.Caracteristicas.Mana <= 10)
+            if (Oponente.Caracteristicas.Mana <= 10)
             {
                 RestarSalud(Oponente, PersonajeElegido);
             }
             else
             {
                 var rdm = new Random();
-                if(Oponente.Caracteristicas.Salud >= 70)
+                if (Oponente.Caracteristicas.Salud >= 70)
                 {
-                    if(Oponente.Caracteristicas.Mana >= 70)
+                    if (Oponente.Caracteristicas.Mana >= 70)
                     {
-                        switch(rdm.Next(3))
+                        switch (rdm.Next(3))
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
@@ -107,7 +107,7 @@ namespace VentanaCombate
                     }
                     else
                     {
-                        switch(rdm.Next(3))
+                        switch (rdm.Next(3))
                         {
                             case 0:
                             case 1: RestarSalud(Oponente, PersonajeElegido);
@@ -116,11 +116,11 @@ namespace VentanaCombate
                                 break;
                         }
                     }
-                } else if(Oponente.Caracteristicas.Salud >= 50)
+                } else if (Oponente.Caracteristicas.Salud >= 50)
                 {
-                    if(Oponente.Caracteristicas.Mana >= 70)
+                    if (Oponente.Caracteristicas.Mana >= 70)
                     {
-                        switch(rdm.Next(3))
+                        switch (rdm.Next(3))
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
@@ -129,9 +129,9 @@ namespace VentanaCombate
                             case 2: AumentarDefensa(Oponente, MovimientosPorClave[3]); //+8
                                 break;
                         }
-                    } else if(Oponente.Caracteristicas.Mana >= 40)
+                    } else if (Oponente.Caracteristicas.Mana >= 40)
                     {
-                        switch(rdm.Next(3))
+                        switch (rdm.Next(3))
                         {
                             case 0:
                             case 1: RestarSalud(Oponente, PersonajeElegido);
@@ -144,11 +144,11 @@ namespace VentanaCombate
                     {
                         RestarSalud(Oponente, PersonajeElegido);
                     }
-                } else if(Oponente.Caracteristicas.Salud > 25)
+                } else if (Oponente.Caracteristicas.Salud > 25)
                 {
-                    if(Oponente.Caracteristicas.Mana >= 50)
+                    if (Oponente.Caracteristicas.Mana >= 50)
                     {
-                        switch(rdm.Next(4))
+                        switch (rdm.Next(4))
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
@@ -159,7 +159,7 @@ namespace VentanaCombate
                             case 3: AumentarSalud(Oponente, MovimientosPorClave[6]); //+15
                                 break;
                         }
-                    } else if(Oponente.Caracteristicas.Mana >= 30)
+                    } else if (Oponente.Caracteristicas.Mana >= 30)
                     {
                         switch (rdm.Next(3))
                         {
@@ -175,11 +175,11 @@ namespace VentanaCombate
                     {
                         RestarSalud(Oponente, PersonajeElegido);
                     }
-                } else if(Oponente.Caracteristicas.Salud <= 25)
+                } else if (Oponente.Caracteristicas.Salud <= 25)
                 {
-                    if(PersonajeElegido.Caracteristicas.Salud <= 15)
+                    if (PersonajeElegido.Caracteristicas.Salud <= 15)
                     {
-                        if(Oponente.Caracteristicas.Mana >= 30)
+                        if (Oponente.Caracteristicas.Mana >= 30)
                         {
                             BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
                         } else
@@ -188,9 +188,9 @@ namespace VentanaCombate
                         }
                     } else
                     {
-                        if(Oponente.Caracteristicas.Mana >= 15)
+                        if (Oponente.Caracteristicas.Mana >= 15)
                         {
-                            if((PersonajeElegido.Caracteristicas.Salud - Oponente.Caracteristicas.Salud) > 12)
+                            if ((PersonajeElegido.Caracteristicas.Salud - Oponente.Caracteristicas.Salud) > 12)
                             {
                                 if (Oponente.Caracteristicas.Mana >= 40)
                                 {
@@ -220,7 +220,7 @@ namespace VentanaCombate
 
             if (GolpeCritico(atacante))
             {
-                dañoRealizado = (int) (dañoRealizado * 1.35);
+                dañoRealizado = (int)(dañoRealizado * 1.35);
                 Console.WriteLine($"\t\t\nGOLPE CRITICO!!! Haz realizado {dañoRealizado} de daño a tu oponente");
             } else
             {
@@ -241,7 +241,7 @@ namespace VentanaCombate
             int dañoRealizado = atacante.Caracteristicas.Daño;
             defensor.Caracteristicas.Salud -= dañoRealizado;
             atacante.Caracteristicas.Mana -= movimiento.CostoMana;
-            if(atacante.Caracteristicas.Mana < 0)
+            if (atacante.Caracteristicas.Mana < 0)
             {
                 atacante.Caracteristicas.Mana = 0;
             }
@@ -282,9 +282,9 @@ namespace VentanaCombate
             var categorias = listaMovimientos.GroupBy(m => m.Categoria);
             int i = 1;
 
-            foreach(var categoria in categorias)
+            foreach (var categoria in categorias)
             {
-                foreach(var movimiento in categoria)
+                foreach (var movimiento in categoria)
                 {
                     movimientosPorClave.Add(i, movimiento);
                     i++;
@@ -297,6 +297,8 @@ namespace VentanaCombate
         {
             var jsonHelper = new HelperJson();
             var listaCampeones = new List<Personaje>();
+
+            campeon.FechaCampeon = DateTime.Now;
 
             if (!File.Exists(nombreArchivo))
             {
