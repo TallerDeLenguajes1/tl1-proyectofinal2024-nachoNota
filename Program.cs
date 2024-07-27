@@ -25,6 +25,8 @@ do
     Console.Write(Texto.CentrarLinea("Elija una de las opciones: "));
     OpcionMenu = Valid.ValidarOpcion(4);
 
+    Console.Clear();
+
     if(OpcionMenu != 4)
     {
         //Creo personajes con sus datos y caracteristicas y hago lista que los contenga
@@ -56,7 +58,7 @@ do
 
                 Console.Clear();
 
-                //await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
 
                 if(Combate.EsGanador(PersonajeElegido))
                 {
@@ -76,9 +78,8 @@ do
                     
                     Console.Clear();
 
-                  //  await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                    await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
 
-                        PersonajeElegido.Caracteristicas.Salud = 0;
                     if (Combate.EsGanador(PersonajeElegido))
                     {
                         await Texto.EscribirTextoAsync("¿Que? ¿En serio llegaste a la final? La verdad que no me esperaba que llegues tan lejos, voy a tener que ponerte las cosas más complicadas...\n\n");
@@ -99,7 +100,8 @@ do
 
                         Console.Clear();
 
-                        //await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                        await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                        
                         if (Combate.EsGanador(PersonajeElegido))
                         {
                             Texto.MensajeCampeon();
