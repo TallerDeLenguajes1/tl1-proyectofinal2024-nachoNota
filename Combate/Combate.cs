@@ -38,7 +38,7 @@ namespace VentanaCombate
 
                     Turno = true;
                 }
-                await Task.Delay(3000);
+                await Task.Delay(2400);
 
                 Console.Clear();
             }
