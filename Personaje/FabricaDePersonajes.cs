@@ -105,11 +105,9 @@ namespace MiProyecto.FabricaDePersonajes
             
         private Datos datos { get; set; }
         private Caracteristicas caracteristicas { get; set; }
-        private DateTime fechaCampeon { get; set; }
 
         public Datos Datos { get => datos; set => datos = value; }
         public Caracteristicas Caracteristicas { get => caracteristicas; set => caracteristicas = value; }
-        public DateTime FechaCampeon { get => fechaCampeon; set => fechaCampeon = value; }
 
         public Personaje(Datos datos, Caracteristicas caracteristicas)
         {

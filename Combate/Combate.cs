@@ -275,30 +275,13 @@ namespace VentanaCombate
             return (personaje.Caracteristicas.Salud > 0) ? true : false;
         }
 
-        public Dictionary<int, Movimientos> CrearClavesMovimientos()
-        {
-            var listaMovimientos = CrearListaMovimientos();
-            var movimientosPorClave = new Dictionary<int, Movimientos>();
-            var categorias = listaMovimientos.GroupBy(m => m.Categoria);
-            int i = 1;
-
-            foreach (var categoria in categorias)
-            {
-                foreach (var movimiento in categoria)
-                {
-                    movimientosPorClave.Add(i, movimiento);
-                    i++;
-                }
-            }
-            return movimientosPorClave;
-        }
 
         public void GuardarCampeon(string nombreArchivo, Personaje campeon)
         {
             var jsonHelper = new HelperJson();
             var listaCampeones = new List<Personaje>();
 
-            campeon.FechaCampeon = DateTime.Now;
+            campeon.Datos.FechaCampeon = DateTime.Now;
 
             if (!File.Exists(nombreArchivo))
             {
@@ -318,6 +301,24 @@ namespace VentanaCombate
 
                 jsonHelper.GuardarArchivo(nombreArchivo, stringJsonNuevo);
             }
+        }
+
+        public Dictionary<int, Movimientos> CrearClavesMovimientos()
+        {
+            var listaMovimientos = CrearListaMovimientos();
+            var movimientosPorClave = new Dictionary<int, Movimientos>();
+            var categorias = listaMovimientos.GroupBy(m => m.Categoria);
+            int i = 1;
+
+            foreach (var categoria in categorias)
+            {
+                foreach (var movimiento in categoria)
+                {
+                    movimientosPorClave.Add(i, movimiento);
+                    i++;
+                }
+            }
+            return movimientosPorClave;
         }
 
         public List<Movimientos> CrearListaMovimientos()
