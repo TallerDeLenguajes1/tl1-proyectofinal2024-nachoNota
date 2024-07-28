@@ -129,8 +129,6 @@ do
                             Console.Write(" :D");
   
                             Combate.GuardarCampeon("CampeonesHistoricos.json", Oponente);
-
-                            await Task.Delay(1000);
                         }
                     }
                     else
@@ -140,8 +138,7 @@ do
                         await Task.Delay(1000);
                         await Texto.EscribirTextoAsync("Al fin y al cabo, pocos fueron los que lograron enfrentarse a mi campeón mas fuerte\n");
                         await Task.Delay(1000);
-                        await Texto.EscribirTextoAsync("Pero bueno, ¿quien te dice que en el proximo intento no llegarás más lejos? Acá estaré esperando...\n");
-                        await Task.Delay(1500);
+                        await Texto.EscribirTextoAsync("Pero bueno, ¿quien te dice que en el próximo intento no llegarás más lejos? Acá estaré esperando...\n");
                     }
                 }
                 else
@@ -149,12 +146,15 @@ do
                     Console.WriteLine("\n\n");
                     await Texto.EscribirTextoAsync("Rival complicado eh?\n");
                     await Task.Delay(1000);
-                    await Texto.EscribirTextoAsync("No te preocupers, siempres puedes arrancar el torneo desde cero, solo trata de no perder la paciencia!\n");
+                    await Texto.EscribirTextoAsync("No te preocupes, siempres puedes arrancar el torneo desde cero, solo trata de no perder la paciencia!\n");
                     await Task.Delay(1000);
                     await Texto.EscribirTextoAsync("Te deseo suerte para la proxima!!");
-                    await Task.Delay(1000);
                 }
 
+                await Task.Delay(1000);
+                Console.Write("\n\nPresione cualquier tecla para salir...");
+                Console.ReadKey();
+                
                 break;
             case 2:
                 Texto.MostrarPersonajes(ListaDePersonajes);
