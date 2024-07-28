@@ -102,5 +102,20 @@ namespace CaracteristicasPersonaje
             mana = valorBase;
             precision += 5;
         }
+
+        public void SubirNivel()
+        {
+            nivel++;
+
+            salud += 10;
+            mana += 5;
+            agilidad += GenerarAleatorio(2, 5);
+            fuerza += GenerarAleatorio(2, 5);
+            precision += GenerarAleatorio(2, 5);
+            resistencia += GenerarAleatorio(2, 5);
+
+            daño = CalcularDaño();
+            defensa = CalcularDefensa();
+        }
     }
 }

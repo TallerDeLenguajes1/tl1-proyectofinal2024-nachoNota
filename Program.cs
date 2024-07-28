@@ -160,25 +160,17 @@ do
                 Texto.MostrarPersonajes(ListaDePersonajes);
                 Console.Write("Con qué personaje quiere pelear? (ingresar su numero): ");
                 opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
-
-                Console.Clear();
-
                 PersonajeElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
-                Console.WriteLine($"\nMUY BIEN! El personaje elegido es: \n");
-                Texto.MostrarPersonaje(PersonajeElegido);
-                await Task.Delay(4000);
 
                 Console.Clear();
 
                 Console.WriteLine("\nQuieres elegir tu propio Oponente o elegir uno al azar? 0 = Elegir propio, 1 = Al azar\n");
                 int OpcionOponente = Valid.ValidarOponente();
-
+                
                 Console.Clear();
 
                 if (OpcionOponente == 1)
                 {
-                    Console.WriteLine("\nTu rival es...\n");
-                    await Task.Delay(2000);
                     Oponente = Fabrica.PersonajeAlAzar(ListaDePersonajes);
                 }
                 else
@@ -186,11 +178,41 @@ do
                     Texto.MostrarPersonajes(ListaDePersonajes);
                     Console.Write("Contra qué personaje quiere pelear? (ingresar su numero): ");
                     opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
-
-                    Console.Clear();
                     Oponente = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
-                    Console.WriteLine($"\nMUY BIEN! Tu oponente en este caso será: \n");
                 }
+
+                Console.Clear();
+
+                Console.Write("Que nivel quieres que tenga tu personaje? (6 es el máximo disponible): ");
+                int nivelJugador = Valid.ValidarOpcion(6);
+                
+                if(nivelJugador > 1)
+                {
+                    for(int i = 1; i<nivelJugador; i++)
+                    {
+                        PersonajeElegido.Caracteristicas.SubirNivel();
+                    }
+                }
+
+                Console.Write("\nY el de tu oponente?: ");
+                int nivelOponente = Valid.ValidarOpcion(6);
+                if (nivelOponente > 1)
+                {
+                    for (int i = 1; i < nivelOponente; i++)
+                    {
+                        Oponente.Caracteristicas.SubirNivel();
+                    }
+                }
+
+                Console.Clear();
+
+                Console.WriteLine("\nMUY BIEN! Tu personaje entonces será: \n");
+                Texto.MostrarPersonaje(PersonajeElegido);
+                await Task.Delay(4000);
+
+                Console.Clear();
+
+                Console.WriteLine("\nY en cuanto a tu oponente...\n");
                 Texto.MostrarPersonaje(Oponente);
                 await Task.Delay(4000);
 
@@ -199,7 +221,7 @@ do
                 await Texto.FraseIntroduccionCombate(PersonajeElegido, Oponente);
 
                 Console.Clear();
-
+                
                 await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
 
                 if (Combate.EsGanador(PersonajeElegido))

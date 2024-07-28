@@ -29,7 +29,7 @@ public class APICLIENT
         string publicKey = "650b489211f65652098aedd5afbb79bf";
         string hash = "abde502c3b8786278606247295cf4767";
         string baseUrl = "https://gateway.marvel.com:443/v1/public/";
-        
+        return null;
         try
         {
             HttpClient client = new HttpClient();
