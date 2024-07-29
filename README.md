@@ -1,0 +1,18 @@
+# AVENGERS: A NEW MULTIVERSE
+## Descripción general
+Este juego trata sobre un multiverso completamente nuevo en el que los personajes más poderosos del UCM pelean entre sí para poder quedarse con la victoria, y así dejar su nombre grabado en el recuerdo de todos. 
+
+## Mecánicas de juego
+Las mecánicas de juego son simples. Ingresas a nuestro juego y debes elegir una de las opciones para comenzar a batallar con el personaje que quieras. Tenemos dos opciones para batallar:  
+- TORNEO: En esta modalidad ingresarás con el personaje de tu elección y deberás abrir tu camino a la final midiendote con distintos personajes, cada uno con su propio nivel, que irá aumentando progresivamente a medida que avances.
+- COMBATE 1V1: Por otra parte, puedes llevar a cabo un combate cara a cara con un oponente de tu eleccion, pudiendo también ponerle el nivel que quieras para probarte a ti mismo.  
+
+Ya dentro de la batalla, tienes distintos movimientos para elegir dependiendo de la cantidad de maná disponible que tengas. Puedes elegir entre ir al frente y atacar, curarte en el caso de que tengas poca vida, o aumentar tu defensa para que tu oponente haga menos daño al atacarte.
+
+## Estructura general
+Este proyecto presenta dos carpetas y distintas clases para asegurar el correcto funcionamiento de este proyecto.
+- **Combate**  
+	- *Combate.cs*: Esta clase presenenta los distintos métodos para que el combate entre los personajes funcione, como la lógica del daño que se realiza al atacar, o cómo está estructurada la inteligencia del oponente para saber qué movimiento realizar, etc.
+	- *Movimientos.cs*: Una clase para inicializar los movimientos, en los que cada uno presenta su propio nombre, descripcion, costo de maná, y una categoría asignada según la función del movimiento. 
+- **Personaje**  
+	- *Datos.cs*: Son los datos del personaje en particular, los cuales incluyen su nombre, una corta descripción del mismo 	
