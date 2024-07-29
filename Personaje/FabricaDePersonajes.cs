@@ -84,7 +84,7 @@ namespace MiProyecto.FabricaDePersonajes
             helperJson.GuardarArchivo(nombreArchivo, stringJson);
         }
 
-        public Personaje PersonajeAlAzar(List<Personaje> listaDePersonajes)
+        public Personaje PersonajeAleatorio(List<Personaje> listaDePersonajes)
         {
             int random = new Random().Next(listaDePersonajes.Count);
             Personaje Oponente = listaDePersonajes[random];

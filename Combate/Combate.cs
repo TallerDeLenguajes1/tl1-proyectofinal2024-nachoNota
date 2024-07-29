@@ -6,8 +6,9 @@ namespace VentanaCombate
 {
     public class Combate
     {
-        public async Task NuevoCombate(Personaje PersonajeElegido, Personaje Oponente, Dictionary<int, Movimientos> MovimientosPorClave)
+        public async Task NuevoCombate(Personaje PersonajeElegido, Personaje Oponente)
         {
+            var movimientosPorClave = CrearClavesMovimientos();
             bool Turno = true;
             var Texto = new FuncionesTexto();
             while (PersonajeElegido.Caracteristicas.Salud > 0 && Oponente.Caracteristicas.Salud > 0)
@@ -16,31 +17,99 @@ namespace VentanaCombate
                 {
                     Console.WriteLine("\t\nEs tu turno! Realiza un movimiento!\n");
 
-                    Texto.MostrarDatosCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                    Texto.MostrarDatosCombate(PersonajeElegido, Oponente, movimientosPorClave);
 
-                    var (OpcionElegida, MovimientoElegido) = new ValidarOpciones().ValidarMovimiento(MovimientosPorClave);
+                    var (OpcionElegida, movimientoElegido) = new ValidarOpciones().ValidarMovimiento(movimientosPorClave);
 
                     Console.Clear();
 
-                    Turno = TurnoJugador(PersonajeElegido, Oponente, OpcionElegida, MovimientoElegido);
+                    Turno = TurnoJugador(PersonajeElegido, Oponente, OpcionElegida, movimientoElegido);
                 }
                 else
                 {
                     Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
 
-                    Texto.MostrarDatosCombate(Oponente, PersonajeElegido, MovimientosPorClave);
+                    Texto.MostrarDatosCombate(Oponente, PersonajeElegido, movimientosPorClave);
 
                     await Task.Delay(3000);
 
                     Console.Clear();
 
-                    TurnoOponente(Oponente, PersonajeElegido, MovimientosPorClave);
+                    TurnoOponente(Oponente, PersonajeElegido, movimientosPorClave);
 
                     Turno = true;
                 }
                 await Task.Delay(2400);
 
                 Console.Clear();
+            }
+        }
+
+        public async Task Combate2v2(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
+        {
+            var movimientosPorClave = CrearClavesMovimientos();
+            movimientosPorClave.Add(movimientosPorClave.Count + 1, new Movimientos("Refuerzos en camino", "Cambia con tu compañero de equipo", "Cambio", 0, 0));
+            bool Turno = true;
+            var Texto = new FuncionesTexto();
+
+            Personaje personajeActivo = elegido1;
+            Personaje oponenteActivo = oponente1;
+
+            while (personajeActivo.Caracteristicas.Salud > 0)
+            {
+                if (Turno)
+                {
+                    Console.WriteLine("\t\nEs tu turno! Realiza un movimiento!\n");
+
+                    Texto.MostrarDatosCombate(personajeActivo, oponenteActivo, movimientosPorClave);
+
+                    var (opcionElegida, movimientoElegido) = new ValidarOpciones().ValidarMovimiento(movimientosPorClave);
+
+                    Console.Clear();
+
+                    if(opcionElegida == 7)
+                    {
+                        personajeActivo = IntercambiarPersonaje(elegido1, elegido2);
+                    } else
+                    {
+                        Turno = TurnoJugador(personajeActivo, oponenteActivo, opcionElegida, movimientoElegido);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
+
+                    Texto.MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
+
+                    await Task.Delay(3000);
+
+                    Console.Clear();
+
+                    TurnoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
+
+                    Turno = true;
+                }
+
+                await Task.Delay(2400);
+
+                Console.Clear();
+                
+            }
+
+            movimientosPorClave.Remove(movimientosPorClave.Count);
+        }
+
+        public Personaje IntercambiarPersonaje(Personaje personajeActual, Personaje personajeACambiar)
+        {
+            if(personajeACambiar.Caracteristicas.Salud > 0)
+            {
+                Console.WriteLine($"ATENCION!! {personajeActual} abandona el campo de batalla y en su lugar ingresa {personajeACambiar}");
+                return personajeACambiar;
+            }
+            else
+            {
+                Console.WriteLine("No puedes usar a tu compañero ya que no tiene salud.");
+                return personajeActual;
             }
         }
 
@@ -81,7 +150,7 @@ namespace VentanaCombate
             return turno;
         }
 
-        public void TurnoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> MovimientosPorClave)
+        public void TurnoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> movimientosPorClave)
         {
             if (Oponente.Caracteristicas.Mana <= 10)
             {
@@ -98,10 +167,10 @@ namespace VentanaCombate
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 1: BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
+                            case 1: BurlarDefensa(Oponente, PersonajeElegido, movimientosPorClave[2]);
                                 break;
                             case 2:
-                                AumentarDefensa(Oponente, MovimientosPorClave[3]); //+8
+                                AumentarDefensa(Oponente, movimientosPorClave[3]); //+8
                                 break;
                         }
                     }
@@ -112,7 +181,7 @@ namespace VentanaCombate
                             case 0:
                             case 1: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]); //+4
+                            case 2: AumentarDefensa(Oponente, movimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -124,9 +193,9 @@ namespace VentanaCombate
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 1: BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
+                            case 1: BurlarDefensa(Oponente, PersonajeElegido, movimientosPorClave[2]);
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[3]); //+8
+                            case 2: AumentarDefensa(Oponente, movimientosPorClave[3]); //+8
                                 break;
                         }
                     } else if (Oponente.Caracteristicas.Mana >= 40)
@@ -136,7 +205,7 @@ namespace VentanaCombate
                             case 0:
                             case 1: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]); //+4
+                            case 2: AumentarDefensa(Oponente, movimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -152,11 +221,11 @@ namespace VentanaCombate
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 1: BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
+                            case 1: BurlarDefensa(Oponente, PersonajeElegido, movimientosPorClave[2]);
                                 break;
-                            case 2: AumentarSalud(Oponente, MovimientosPorClave[5]); //+25
+                            case 2: AumentarSalud(Oponente, movimientosPorClave[5]); //+25
                                 break;
-                            case 3: AumentarSalud(Oponente, MovimientosPorClave[6]); //+15
+                            case 3: AumentarSalud(Oponente, movimientosPorClave[6]); //+15
                                 break;
                         }
                     } else if (Oponente.Caracteristicas.Mana >= 30)
@@ -165,9 +234,9 @@ namespace VentanaCombate
                         {
                             case 0: RestarSalud(Oponente, PersonajeElegido);
                                 break;
-                            case 1: AumentarSalud(Oponente, MovimientosPorClave[6]); //+15
+                            case 1: AumentarSalud(Oponente, movimientosPorClave[6]); //+15
                                 break;
-                            case 2: AumentarDefensa(Oponente, MovimientosPorClave[4]); //+4
+                            case 2: AumentarDefensa(Oponente, movimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -181,7 +250,7 @@ namespace VentanaCombate
                     {
                         if (Oponente.Caracteristicas.Mana >= 30)
                         {
-                            BurlarDefensa(Oponente, PersonajeElegido, MovimientosPorClave[2]);
+                            BurlarDefensa(Oponente, PersonajeElegido, movimientosPorClave[2]);
                         } else
                         {
                             RestarSalud(Oponente, PersonajeElegido);
@@ -194,10 +263,10 @@ namespace VentanaCombate
                             {
                                 if (Oponente.Caracteristicas.Mana >= 40)
                                 {
-                                    AumentarSalud(Oponente, MovimientosPorClave[5]); //+25
+                                    AumentarSalud(Oponente, movimientosPorClave[5]); //+25
                                 } else
                                 {
-                                    AumentarSalud(Oponente, MovimientosPorClave[6]); //+15
+                                    AumentarSalud(Oponente, movimientosPorClave[6]); //+15
                                 }
                             }
                             else

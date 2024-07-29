@@ -124,16 +124,14 @@ public class FuncionesTexto
                 await EscribirTextoAsync($"Con un último golpe decisivo, {campeon.Datos.Nombre} reclama la victoria sobre {perdedor.Datos.Nombre}. ¡Que su nombre sea recordado en las leyendas!");
                 break;
         }
-
-        await Task.Delay(2000);
     }
 
-    public void MostrarDatosCombate(Personaje atacante, Personaje defensor, Dictionary<int, Movimientos> MovimientosPorClave)
+    public void MostrarDatosCombate(Personaje atacante, Personaje defensor, Dictionary<int, Movimientos> movimientosPorClave)
     {
         Console.WriteLine($"\tMana disponible: {atacante.Caracteristicas.Mana}\n");
         Console.WriteLine($"\tSalud actual: {atacante.Caracteristicas.Salud}");
         Console.WriteLine($"\tSalud del oponente: {defensor.Caracteristicas.Salud}\n");
-        MostrarMovimientos(MovimientosPorClave);
+        MostrarMovimientos(movimientosPorClave);
     }
 
     public void Menu()
@@ -185,10 +183,10 @@ public class FuncionesTexto
         }
     }
 
-    public void MostrarMovimientos(Dictionary<int, Movimientos> MovimientosPorClave)
+    public void MostrarMovimientos(Dictionary<int, Movimientos> movimientosPorClave)
     {
         int i = 1;
-        var categorias = MovimientosPorClave.Values.GroupBy(m => m.Categoria); //Agrupo los movimientos segun sus categorias
+        var categorias = movimientosPorClave.Values.GroupBy(m => m.Categoria); //Agrupo los movimientos segun sus categorias
 
         foreach(var categoria in categorias)
         {

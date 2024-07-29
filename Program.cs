@@ -31,7 +31,6 @@ do
     {
         //Creo personajes con sus datos y caracteristicas y hago lista que los contenga
         var ListaDePersonajes = Fabrica.CrearListaPersonajes(ListaNombresDescripciones);
-        var MovimientosPorClave = Combate.CrearClavesMovimientos();
         switch (OpcionMenu)
         {
             case 1:
@@ -52,13 +51,13 @@ do
                 Console.WriteLine("En cuartos de final tendras que enfrentarte a...\n");
                 await Task.Delay(2000);
 
-                Personaje Oponente = Fabrica.PersonajeAlAzar(ListaDePersonajes);
+                Personaje Oponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
                 Texto.MostrarPersonaje(Oponente);
                 await Task.Delay(4000);
 
                 Console.Clear();
 
-                await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                await Combate.NuevoCombate(PersonajeElegido, Oponente);
 
                 if(Combate.EsGanador(PersonajeElegido))
                 {
@@ -69,7 +68,7 @@ do
                     Console.WriteLine("Para estas instancias, tu rival será...\n");
                     await Task.Delay(2000);
                     
-                    Oponente = Fabrica.PersonajeAlAzar(ListaDePersonajes);
+                    Oponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
                     Oponente.Caracteristicas.SubirNivelOponente();
                     
                     Texto.MostrarPersonaje(Oponente);
@@ -78,7 +77,7 @@ do
                     
                     Console.Clear();
 
-                    await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                    await Combate.NuevoCombate(PersonajeElegido, Oponente);
 
                     if (Combate.EsGanador(PersonajeElegido))
                     {
@@ -89,7 +88,7 @@ do
                         Console.WriteLine("Para estas instancias, tu rival será...\n");
                         await Task.Delay(2000);
 
-                        Oponente = Fabrica.PersonajeAlAzar(ListaDePersonajes);
+                        Oponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
                         for(int i = 0; i < 2; i++)
                         {
                             Oponente.Caracteristicas.SubirNivelOponente();
@@ -100,30 +99,29 @@ do
 
                         Console.Clear();
 
-                        await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                        await Combate.NuevoCombate(PersonajeElegido, Oponente);
                         
                         if (Combate.EsGanador(PersonajeElegido))
                         {
                             Texto.MensajeCampeon();
                             Console.WriteLine("\n\n");
-                            await Texto.EscribirTextoAsync($"EN SERIO???? TE PUSE A MI MEJOR PELEADOR Y NO PUDO HACERTE NADA???");
+                            await Texto.EscribirTextoAsync("EN SERIO???? TE PUSE A MI MEJOR PELEADOR Y NO PUDO HACERTE NADA???");
                             await Task.Delay(1000);
-                            await Texto.EscribirTextoAsync($" Bueno, supongo que tu nombre, {PersonajeElegido.Datos.Nombre}, merece estar en nuestro listado de campeones historicos.");
+                            await Texto.EscribirTextoAsync($" Bueno, supongo que tu nombre, {PersonajeElegido.Datos.Nombre}, merece estar en nuestro listado de campeones historicos, te lo ganaste.");
+                            await Task.Delay(1000);
+                            await Texto.EscribirTextoAsync("\nPor cierto, acá estaré esperando por mi revancha...");
+                            
                             Combate.GuardarCampeon("CampeonesHistoricos.json", PersonajeElegido);
-                            await Task.Delay(2000);
                         }
                         else
                         {
                             Console.WriteLine("\n\n");
                             await Texto.EscribirTextoAsync("JAAAAAAAAAAAAAAAAAAAAAAAA JA JA JA JA JA JA\n");
                             await Task.Delay(1000);
-                            
                             await Texto.EscribirTextoAsync("ah, perdon. Donde estan mis modales...\n");
                             await Task.Delay(1000);
-                           
                             await Texto.EscribirTextoAsync("Te felicito por haber llegado tan lejos, pocos héroes logran estar donde estás parado ahora mismo, lástima que tuviste que verte las caras con mi peleador mas fuerte.\n");
                             await Task.Delay(1000);
-                           
                             await Texto.EscribirTextoAsync("ah, casi se me olvida, he agregado el nombre de mi campeón a la lista de historicos, para que cada vez que entres puedas ver el dia exacto en el que perdiste");
                             await Task.Delay(1000);
                             Console.Write(" :D");
@@ -150,40 +148,34 @@ do
                     await Task.Delay(1000);
                     await Texto.EscribirTextoAsync("Te deseo suerte para la proxima!!");
                 }
-
-                await Task.Delay(1000);
-                Console.Write("\n\nPresione cualquier tecla para salir...");
-                Console.ReadKey();
-                
                 break;
             case 2:
                 Texto.MostrarPersonajes(ListaDePersonajes);
-                Console.Write("Con qué personaje quiere pelear? (ingresar su numero): ");
+                Console.Write("Quién será tu primer peleador? (ingresar su numero): ");
                 opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
-                PersonajeElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+                Personaje PrimerElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
 
                 Console.Clear();
 
-                Console.WriteLine("\nQuieres elegir tu propio Oponente o elegir uno al azar? 0 = Elegir propio, 1 = Al azar\n");
-                int OpcionOponente = Valid.ValidarOponente();
-                
-                Console.Clear();
-
-                if (OpcionOponente == 1)
-                {
-                    Oponente = Fabrica.PersonajeAlAzar(ListaDePersonajes);
-                }
-                else
-                {
-                    Texto.MostrarPersonajes(ListaDePersonajes);
-                    Console.Write("Contra qué personaje quiere pelear? (ingresar su numero): ");
-                    opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
-                    Oponente = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
-                }
+                Texto.MostrarPersonajes(ListaDePersonajes);
+                Console.WriteLine("Pongamosle un compañero a tu peleador, quien será?: ");
+                opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
+                Personaje SegundoElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
 
                 Console.Clear();
 
-                Console.Write("Que nivel quieres que tenga tu personaje? (6 es el máximo disponible): ");
+                Console.WriteLine("Muy bien!! Tus oponentes en este caso serán: ");
+                await Task.Delay(2000);
+
+                Personaje PrimerOponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
+                Personaje SegundoOponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
+                Texto.MostrarPersonaje(PrimerOponente);
+                Texto.MostrarPersonaje(SegundoOponente);
+                await Task.Delay(8000);
+
+  //              Console.Clear();
+
+/*                Console.Write("Que nivel quieres que tenga tu personaje? (6 es el máximo disponible): ");
                 int nivelJugador = Valid.ValidarOpcion(6);
                 
                 if(nivelJugador > 1)
@@ -203,34 +195,18 @@ do
                         Oponente.Caracteristicas.SubirNivel();
                     }
                 }
-
-                Console.Clear();
-
-                Console.WriteLine("\nMUY BIEN! Tu personaje entonces será: \n");
-                Texto.MostrarPersonaje(PersonajeElegido);
-                await Task.Delay(4000);
-
-                Console.Clear();
-
-                Console.WriteLine("\nY en cuanto a tu oponente...\n");
-                Texto.MostrarPersonaje(Oponente);
-                await Task.Delay(4000);
-
-                Console.Clear();
-
-                await Texto.FraseIntroduccionCombate(PersonajeElegido, Oponente);
-
+*/
                 Console.Clear();
                 
-                await Combate.NuevoCombate(PersonajeElegido, Oponente, MovimientosPorClave);
+                await Combate.Combate2v2(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
 
-                if (Combate.EsGanador(PersonajeElegido))
+                if (Combate.EsGanador(PrimerElegido))
                 {
-                    await Texto.AnunciarGanador(PersonajeElegido, Oponente);
+                    await Texto.AnunciarGanador(PrimerOponente, PrimerElegido);
                 }
                 else
                 {
-                    await Texto.AnunciarGanador(Oponente, PersonajeElegido);
+                    await Texto.AnunciarGanador(SegundoOponente, PrimerOponente);
                 }
                 break;
             case 3:
@@ -245,11 +221,12 @@ do
                     Texto.MostrarCampeones(NombreArchivo);
                 }
 
-                Console.Write("\n\nPresione cualquier tecla para salir...");
-                Console.ReadKey();
-
                 break;
         }
+        await Task.Delay(1000);
+        Console.Write("\n\nPresione cualquier tecla para salir...");
+        Console.ReadKey();
+
     }
     else
     {
