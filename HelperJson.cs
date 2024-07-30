@@ -7,7 +7,6 @@ public class HelperJson
 {
     public void GuardarCampeon(string nombreArchivo, Personaje campeon)
     {
-        var jsonHelper = new HelperJson();
         var listaCampeones = new List<Personaje>();
 
         campeon.Datos.FechaCampeon = DateTime.Now;
@@ -16,11 +15,11 @@ public class HelperJson
         {
             listaCampeones.Add(campeon);
             string stringJson = JsonSerializer.Serialize(listaCampeones);
-            jsonHelper.GuardarArchivo(nombreArchivo, stringJson);
+            GuardarArchivo(nombreArchivo, stringJson);
         }
         else
         {
-            string recuperadoJson = jsonHelper.AbrirArchivo(nombreArchivo);
+            string recuperadoJson = AbrirArchivo(nombreArchivo);
 
             var listaRecuperada = JsonSerializer.Deserialize<List<Personaje>>(recuperadoJson);
 
@@ -28,7 +27,7 @@ public class HelperJson
 
             string stringJsonNuevo = JsonSerializer.Serialize(listaRecuperada);
 
-            jsonHelper.GuardarArchivo(nombreArchivo, stringJsonNuevo);
+            GuardarArchivo(nombreArchivo, stringJsonNuevo);
         }
     }
 
