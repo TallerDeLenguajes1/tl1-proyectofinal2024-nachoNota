@@ -23,7 +23,12 @@ namespace VentanaCombate
             {
                 if (turno)
                 {
-                    turno = TurnoJugador(personajeActivo, oponenteActivo, elegido1, elegido2, movimientosPorClave);
+                    if(personajeActivo.Caracteristicas.Salud <= 0)
+                    {
+                        personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
+                    }
+
+                    turno = TurnoJugador(ref personajeActivo, oponenteActivo, elegido1, elegido2, movimientosPorClave);
                 }
                 else
                 {
@@ -34,29 +39,18 @@ namespace VentanaCombate
                         Console.Clear();
                     }
 
-                    Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
-                    new FuncionesTexto().MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
-
-                    await Task.Delay(3000);
-
-                    Console.Clear();
-
-                    TurnoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
-
+                    await TurnoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
+                    
                     turno = true;
                 }
-
                 await Task.Delay(2400);
                 Console.Clear();
-            }
-            if(elegido2 != null)
-            {
-                movimientosPorClave.Remove(movimientosPorClave.Count + 1);
             }
         }
 
         public bool TurnoJugador(ref Personaje personajeActivo, Personaje oponenteActivo, Personaje elegido1, Personaje elegido2, Dictionary<int, Movimientos> movimientosPorClave)
         {
+   
             Console.WriteLine("\t\nEs tu turno! Realiza un movimiento!\n");
             new FuncionesTexto().MostrarDatosCombate(personajeActivo, oponenteActivo, movimientosPorClave);
 
@@ -64,7 +58,7 @@ namespace VentanaCombate
 
             Console.Clear();
 
-            if (opcionElegida == movimientosPorClave.Count + 1)
+            if (opcionElegida == movimientosPorClave.Count)
             {
                 personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
                 return true;
@@ -112,7 +106,20 @@ namespace VentanaCombate
             return turno;
         }
 
-        public void TurnoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> movimientosPorClave)
+        public async Task TurnoOponente(Personaje oponenteActivo, Personaje personajeActivo, Dictionary<int, Movimientos> movimientosPorClave)
+        {
+
+            Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
+            new FuncionesTexto().MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
+
+            await Task.Delay(3000);
+
+            Console.Clear();
+
+            RealizarMovimientoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
+        }
+
+        public void RealizarMovimientoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> movimientosPorClave)
         {
             if (Oponente.Caracteristicas.Mana <= 10)
             {

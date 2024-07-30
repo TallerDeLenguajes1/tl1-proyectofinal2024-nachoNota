@@ -177,7 +177,7 @@ do
 
                 Console.Clear();
                 
-                await Combate.NuevoCombate(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+                await Combate.NuevoCombate(PrimerElegido, PrimerOponente, SegundoElegido, SegundoOponente);
 
                 if (Combate.EsGanador(PrimerElegido, SegundoElegido))
                 {
