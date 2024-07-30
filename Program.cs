@@ -100,10 +100,10 @@ do
                         Console.Clear();
 
                         await Combate.NuevoCombate(PersonajeElegido, Oponente);
-                        
+
                         if (Combate.EsGanador(PersonajeElegido))
                         {
-                            Texto.MensajeCampeon();
+                            Texto.LogoCampeon();
                             Console.WriteLine("\n\n");
                             await Texto.EscribirTextoAsync("EN SERIO???? TE PUSE A MI MEJOR PELEADOR Y NO PUDO HACERTE NADA???");
                             await Task.Delay(1000);
@@ -156,9 +156,10 @@ do
                 Personaje PrimerElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
 
                 Console.Clear();
+                await Task.Delay(1000);
 
                 Texto.MostrarPersonajes(ListaDePersonajes);
-                Console.WriteLine("Pongamosle un compañero a tu peleador, quien será?: ");
+                Console.Write("Pongamosle un compañero a tu peleador, quien será?: ");
                 opcionPersonaje = Valid.ValidarOpcion(ListaDePersonajes.Count);
                 Personaje SegundoElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
 
@@ -173,40 +174,17 @@ do
                 Texto.MostrarPersonaje(SegundoOponente);
                 await Task.Delay(8000);
 
-  //              Console.Clear();
-
-/*                Console.Write("Que nivel quieres que tenga tu personaje? (6 es el máximo disponible): ");
-                int nivelJugador = Valid.ValidarOpcion(6);
-                
-                if(nivelJugador > 1)
-                {
-                    for(int i = 1; i<nivelJugador; i++)
-                    {
-                        PersonajeElegido.Caracteristicas.SubirNivel();
-                    }
-                }
-
-                Console.Write("\nY el de tu oponente?: ");
-                int nivelOponente = Valid.ValidarOpcion(6);
-                if (nivelOponente > 1)
-                {
-                    for (int i = 1; i < nivelOponente; i++)
-                    {
-                        Oponente.Caracteristicas.SubirNivel();
-                    }
-                }
-*/
                 Console.Clear();
                 
-                await Combate.Combate2v2(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+                await Combate.NuevoCombate(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
 
-                if (Combate.EsGanador(PrimerElegido))
+                if (Combate.EsGanador(PrimerElegido, SegundoElegido))
                 {
-                    await Texto.AnunciarGanador(PrimerOponente, PrimerElegido);
+                    await Texto.AnunciarGanador(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
                 }
                 else
                 {
-                    await Texto.AnunciarGanador(SegundoOponente, PrimerOponente);
+                    await Texto.AnunciarGanador(PrimerOponente, SegundoOponente, PrimerElegido, SegundoElegido);
                 }
                 break;
             case 3:

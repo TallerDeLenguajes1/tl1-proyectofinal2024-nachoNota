@@ -6,114 +6,61 @@ namespace VentanaCombate
 {
     public class Combate
     {
-        public async Task NuevoCombate(Personaje PersonajeElegido, Personaje Oponente)
+        public async Task NuevoCombate(Personaje elegido1, Personaje oponente1, Personaje elegido2 = null, Personaje oponente2 = null)
         {
             var movimientosPorClave = CrearClavesMovimientos();
-            bool Turno = true;
-            var Texto = new FuncionesTexto();
-            while (PersonajeElegido.Caracteristicas.Salud > 0 && Oponente.Caracteristicas.Salud > 0)
+            bool turno = true;
+
+            if (elegido2 != null)
             {
-                if (Turno)
-                {
-                    Console.WriteLine("\t\nEs tu turno! Realiza un movimiento!\n");
-
-                    Texto.MostrarDatosCombate(PersonajeElegido, Oponente, movimientosPorClave);
-
-                    var (OpcionElegida, movimientoElegido) = new ValidarOpciones().ValidarMovimiento(movimientosPorClave);
-
-                    Console.Clear();
-
-                    Turno = TurnoJugador(PersonajeElegido, Oponente, OpcionElegida, movimientoElegido);
-                }
-                else
-                {
-                    Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
-
-                    Texto.MostrarDatosCombate(Oponente, PersonajeElegido, movimientosPorClave);
-
-                    await Task.Delay(3000);
-
-                    Console.Clear();
-
-                    TurnoOponente(Oponente, PersonajeElegido, movimientosPorClave);
-
-                    Turno = true;
-                }
-                await Task.Delay(2400);
-
-                Console.Clear();
+                movimientosPorClave.Add(movimientosPorClave.Count + 1, new Movimientos("Refuerzos en camino", "Cambia con tu compañero de equipo", "Cambio", 0, 0));
             }
-        }
-
-        public async Task Combate2v2(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
-        {
-            var movimientosPorClave = CrearClavesMovimientos();
-            movimientosPorClave.Add(movimientosPorClave.Count + 1, new Movimientos("Refuerzos en camino", "Cambia con tu compañero de equipo", "Cambio", 0, 0));
-            bool Turno = true;
-            var Texto = new FuncionesTexto();
 
             Personaje personajeActivo = elegido1;
             Personaje oponenteActivo = oponente1;
 
-            while (personajeActivo.Caracteristicas.Salud > 0)
+            while (ContinuarCombate(elegido1, oponente1, elegido2, oponente2))
             {
-                if (Turno)
+                if (turno)
                 {
-                    Console.WriteLine("\t\nEs tu turno! Realiza un movimiento!\n");
-
-                    Texto.MostrarDatosCombate(personajeActivo, oponenteActivo, movimientosPorClave);
-
-                    var (opcionElegida, movimientoElegido) = new ValidarOpciones().ValidarMovimiento(movimientosPorClave);
-
-                    Console.Clear();
-
-                    if(opcionElegida == 7)
-                    {
-                        personajeActivo = IntercambiarPersonaje(elegido1, elegido2);
-                    } else
-                    {
-                        Turno = TurnoJugador(personajeActivo, oponenteActivo, opcionElegida, movimientoElegido);
-                    }
+                    turno = TurnoJugador(personajeActivo, oponenteActivo, elegido1, elegido2, movimientosPorClave);
                 }
                 else
                 {
-                    Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
-
-                    Texto.MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
-
-                    await Task.Delay(3000);
-
-                    Console.Clear();
-
-                    TurnoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
-
-                    Turno = true;
+                    await TurnoOponente(personajeActivo, oponenteActivo, oponente1, oponente2, movimientosPorClave);
+                    turno = true;
                 }
 
                 await Task.Delay(2400);
-
                 Console.Clear();
-                
             }
-
-            movimientosPorClave.Remove(movimientosPorClave.Count);
+            if(elegido2 != null)
+            {
+                movimientosPorClave.Remove(movimientosPorClave.Count + 1);
+            }
         }
 
-        public Personaje IntercambiarPersonaje(Personaje personajeActual, Personaje personajeACambiar)
+        public bool TurnoJugador(ref Personaje personajeActivo, Personaje oponenteActivo, Personaje elegido1, Personaje elegido2, Dictionary<int, Movimientos> movimientosPorClave)
         {
-            if(personajeACambiar.Caracteristicas.Salud > 0)
+            Console.WriteLine("\t\nEs tu turno! Realiza un movimiento!\n");
+            new FuncionesTexto().MostrarDatosCombate(personajeActivo, oponenteActivo, movimientosPorClave);
+
+            var (opcionElegida, movimientoElegido) = new ValidarOpciones().ValidarMovimiento(movimientosPorClave);
+
+            Console.Clear();
+
+            if (opcionElegida == movimientosPorClave.Count + 1)
             {
-                Console.WriteLine($"ATENCION!! {personajeActual} abandona el campo de batalla y en su lugar ingresa {personajeACambiar}");
-                return personajeACambiar;
+                personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
+                return true;
             }
             else
             {
-                Console.WriteLine("No puedes usar a tu compañero ya que no tiene salud.");
-                return personajeActual;
+                return RealizarMovimientoJugador(personajeActivo, oponenteActivo, opcionElegida, movimientoElegido);
             }
         }
 
-        public bool TurnoJugador(Personaje atacante, Personaje defensor, int opcion, Movimientos movimiento)
+        public bool RealizarMovimientoJugador(Personaje atacante, Personaje defensor, int opcion, Movimientos movimiento)
         {
             bool turno = true;
 
@@ -150,7 +97,27 @@ namespace VentanaCombate
             return turno;
         }
 
-        public void TurnoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> movimientosPorClave)
+        public async Task TurnoOponente(Personaje personajeActivo,ref Personaje oponenteActivo, Personaje oponente1, Personaje oponente2, Dictionary<int, Movimientos> movimientosPorClave)
+        {
+            if (oponenteActivo.Caracteristicas.Salud <= 0 && oponenteActivo == oponente1)
+            {
+                oponenteActivo = IntercambiarPersonaje(oponente1, oponente2);
+                await Task.Delay(2400);
+                Console.Clear();
+            }
+
+            Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
+            new FuncionesTexto().MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
+
+            await Task.Delay(3000);
+
+            Console.Clear();
+
+            RealizarMovimientoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
+
+        }
+
+        public void RealizarMovimientoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> movimientosPorClave)
         {
             if (Oponente.Caracteristicas.Mana <= 10)
             {
@@ -283,6 +250,32 @@ namespace VentanaCombate
             }
         }
 
+        public bool ContinuarCombate(Personaje elegido1, Personaje oponente1, Personaje elegido2 = null, Personaje oponente2 = null)
+        {
+            if(elegido2 == null)
+            {
+                return elegido1.Caracteristicas.Salud > 0 && oponente1.Caracteristicas.Salud > 0;
+            } else
+            {
+                return (elegido1.Caracteristicas.Salud > 0 || elegido2.Caracteristicas.Salud > 0) && 
+                    (oponente1.Caracteristicas.Salud > 0 || oponente2.Caracteristicas.Salud > 0);
+            }
+        }
+
+        public Personaje IntercambiarPersonaje(Personaje personajeActual, Personaje personajeACambiar)
+        {
+            if (personajeACambiar.Caracteristicas.Salud > 0)
+            {
+                Console.WriteLine($"ATENCION!! {personajeActual.Datos.Nombre} abandona el campo de batalla y en su lugar ingresa {personajeACambiar.Datos.Nombre}");
+                return personajeACambiar;
+            }
+            else
+            {
+                Console.WriteLine("No puedes usar a tu compañero ya que no tiene salud.");
+                return personajeActual;
+            }
+        }
+
         public void RestarSalud(Personaje atacante, Personaje defensor)
         {
             int dañoRealizado = (int)(atacante.Caracteristicas.Daño - defensor.Caracteristicas.Defensa * 0.3);
@@ -339,9 +332,15 @@ namespace VentanaCombate
             Console.WriteLine($"\t\t\nBien jugado! Aumentaste +{movimiento.CantidadAumento}, ahora tu defensa es de {atacante.Caracteristicas.Defensa}");
         }
 
-        public bool EsGanador(Personaje personaje)
+        public bool EsGanador(Personaje personaje1, Personaje personaje2 = null)
         {
-            return (personaje.Caracteristicas.Salud > 0) ? true : false;
+            if (personaje2 == null)
+            {
+                return personaje1.Caracteristicas.Salud > 0;
+            } else
+            {
+                return personaje1.Caracteristicas.Salud > 0 || personaje2.Caracteristicas.Salud > 0;
+            }
         }
 
 

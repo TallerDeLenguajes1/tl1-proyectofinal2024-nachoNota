@@ -26,7 +26,31 @@ public class FuncionesTexto
         CentrarLineas(logoLineas);
     }
 
-    public void MensajeCampeon()
+    public void Menu()
+    {
+        Console.WriteLine("\n");
+        string[] lineasMenu = {
+            "┌──────────────────────────┐",
+            "│       MENU PRINCIPAL     │",
+            "│──────────────────────────│",
+            "│                          │",
+            "│  1- Comenzar nuevo       │",
+            "│     torneo               │",
+            "│                          │",
+            "│  2- Combate 2v2          │",
+            "│                          │",
+            "│  3- Ganadores            │",
+            "│  historicos del torneo   │",
+            "│                          │",
+            "│  4- Salir                │",
+            "│                          │",
+            "└──────────────────────────┘"
+        };
+
+        CentrarLineas(lineasMenu);
+    }
+
+    public void LogoCampeon()
     {
         string[] campeonLineas = {
         "   ____     _      __  __    ____   U _____ u U  ___ u  _   _    ",
@@ -74,88 +98,65 @@ public class FuncionesTexto
         }
     }
 
-    public async Task FraseIntroduccionCombate(Personaje atacante, Personaje oponente)
+    public async Task FraseIntroduccionCombate(Personaje atacante1, Personaje atacante2, Personaje oponente1, Personaje oponente2)
     {
         int random = new Random().Next(6);
         switch (random)
         {
-
             case 0:
-                await EscribirTextoAsync($"La tierra tiembla y el cielo se oscurece mientras {atacante.Datos.Nombre} y {oponente.Datos.Nombre} se preparan para enfrentarse. ¡Una batalla épica está a punto de desatarse!");
+                await EscribirTextoAsync($"La tierra tiembla y el cielo se oscurece mientras {atacante1.Datos.Nombre} y {atacante2.Datos.Nombre} se preparan para enfrentarse a {oponente1.Datos.Nombre} y {oponente2.Datos.Nombre}. ¡Una batalla épica está a punto de desatarse!");
                 break;
             case 1:
-                await EscribirTextoAsync($"En el umbral del destino, {atacante.Datos.Nombre} y {oponente.Datos.Nombre} se enfrentan con una determinación feroz. ¡Prepárense para el choque de sus vidas!");
+                await EscribirTextoAsync($"En el umbral del destino, {atacante1.Datos.Nombre} y {atacante2.Datos.Nombre} se enfrentan con una determinación feroz contra {oponente1.Datos.Nombre} y {oponente2.Datos.Nombre}. ¡Prepárense para el choque de sus vidas!");
                 break;
             case 2:
-                await EscribirTextoAsync($"Con el rugido del trueno como testigo, {atacante.Datos.Nombre} y {oponente.Datos.Nombre} se disponen a medir sus fuerzas. ¡La guerra está por empezar!");
+                await EscribirTextoAsync($"Con el rugido del trueno como testigo, {atacante1.Datos.Nombre} y {atacante2.Datos.Nombre} se disponen a medir sus fuerzas contra {oponente1.Datos.Nombre} y {oponente2.Datos.Nombre}. ¡La guerra está por empezar!");
                 break;
             case 3:
-                await EscribirTextoAsync($"Las leyendas se escriben con sangre, y hoy, {atacante.Datos.Nombre} y {oponente.Datos.Nombre} añadirán un nuevo capítulo. ¡El combate final está por comenzar!");
+                await EscribirTextoAsync($"Las leyendas se escriben con sangre, y hoy, {atacante1.Datos.Nombre} y {atacante2.Datos.Nombre} añadirán un nuevo capítulo al enfrentarse a {oponente1.Datos.Nombre} y {oponente2.Datos.Nombre}. ¡El combate final está por comenzar!");
                 break;
             case 4:
-                await EscribirTextoAsync($"El destino de muchos pende de un hilo mientras {atacante.Datos.Nombre} y {oponente.Datos.Nombre} se preparan para el duelo definitivo. ¡La historia será testigo de su enfrentamiento!");
+                await EscribirTextoAsync($"El destino de muchos pende de un hilo mientras {atacante1.Datos.Nombre} y {atacante2.Datos.Nombre} se preparan para el duelo definitivo contra {oponente1.Datos.Nombre} y {oponente2.Datos.Nombre}. ¡La historia será testigo de su enfrentamiento!");
                 break;
             case 5:
-                await EscribirTextoAsync($"Los antiguos espíritus observan expectantes mientras {atacante.Datos.Nombre} y {oponente.Datos.Nombre} se preparan para desatar todo su poder. ¡Un duelo titánico está a punto de comenzar!");
+                await EscribirTextoAsync($"Los antiguos espíritus observan expectantes mientras {atacante1.Datos.Nombre} y {atacante2.Datos.Nombre} se preparan para desatar todo su poder contra {oponente1.Datos.Nombre} y {oponente2.Datos.Nombre}. ¡Un duelo titánico está a punto de comenzar!");
                 break;
         }
 
         await Task.Delay(2000);
     }
 
-    public async Task AnunciarGanador(Personaje campeon, Personaje perdedor)
+    public async Task AnunciarGanador(Personaje campeon1, Personaje campeon2, Personaje perdedor1, Personaje perdedor2)
     {
         int random = new Random().Next(5);
         switch (random)
         {
             case 0:
-                await EscribirTextoAsync($"Con una demostración de habilidad y valentía, {campeon.Datos.Nombre} emerge victorioso en esta épica batalla contra {perdedor.Datos.Nombre}. ¡La gloria es suya!");
+                await EscribirTextoAsync($"Con una demostración de habilidad y valentía, {campeon1.Datos.Nombre} y {campeon2.Datos.Nombre} emergen victoriosos en esta épica batalla contra {perdedor1.Datos.Nombre} y {perdedor2.Datos.Nombre}. ¡La gloria es suya!");
                 break;
             case 1:
-                await EscribirTextoAsync($"Después de un enfrentamiento titánico, {campeon.Datos.Nombre} se alza con la victoria, dejando a {perdedor.Datos.Nombre} derrotado en el campo de batalla. ¡El honor le pertenece!");
+                await EscribirTextoAsync($"Después de un enfrentamiento titánico, {campeon1.Datos.Nombre} y {campeon2.Datos.Nombre} se alzan con la victoria, dejando a {perdedor1.Datos.Nombre} y {perdedor2.Datos.Nombre} derrotados en el campo de batalla. ¡El honor les pertenece!");
                 break;
             case 2:
-                await EscribirTextoAsync($"En una lucha que será recordada por la eternidad, {campeon.Datos.Nombre} ha derrotado a {perdedor.Datos.Nombre}. ¡La victoria está escrita en su nombre!");
+                await EscribirTextoAsync($"En una lucha que será recordada por la eternidad, {campeon1.Datos.Nombre} y {campeon2.Datos.Nombre} han derrotado a {perdedor1.Datos.Nombre} y {perdedor2.Datos.Nombre}. ¡La victoria está escrita en sus nombres!");
                 break;
             case 3:
-                await EscribirTextoAsync($"El destino ha hablado y {campeon.Datos.Nombre} ha triunfado sobre {perdedor.Datos.Nombre}. ¡Que su victoria resuene a través del tiempo!");
+                await EscribirTextoAsync($"El destino ha hablado y {campeon1.Datos.Nombre} y {campeon2.Datos.Nombre} han triunfado sobre {perdedor1.Datos.Nombre} y {perdedor2.Datos.Nombre}. ¡Que su victoria resuene a través del tiempo!");
                 break;
             case 4:
-                await EscribirTextoAsync($"Con un último golpe decisivo, {campeon.Datos.Nombre} reclama la victoria sobre {perdedor.Datos.Nombre}. ¡Que su nombre sea recordado en las leyendas!");
+                await EscribirTextoAsync($"Con un último golpe decisivo, {campeon1.Datos.Nombre} y {campeon2.Datos.Nombre} reclaman la victoria sobre {perdedor1.Datos.Nombre} y {perdedor2.Datos.Nombre}. ¡Que sus nombres sean recordados en las leyendas!");
                 break;
         }
     }
 
+
     public void MostrarDatosCombate(Personaje atacante, Personaje defensor, Dictionary<int, Movimientos> movimientosPorClave)
     {
+        Console.WriteLine($"| {atacante.Datos.Nombre.ToUpper()} |\n");
         Console.WriteLine($"\tMana disponible: {atacante.Caracteristicas.Mana}\n");
         Console.WriteLine($"\tSalud actual: {atacante.Caracteristicas.Salud}");
         Console.WriteLine($"\tSalud del oponente: {defensor.Caracteristicas.Salud}\n");
         MostrarMovimientos(movimientosPorClave);
-    }
-
-    public void Menu()
-    {
-        Console.WriteLine("\n");
-        string[] lineasMenu = {
-            "┌──────────────────────────┐",
-            "│       MENU PRINCIPAL     │",
-            "│──────────────────────────│",
-            "│                          │",
-            "│  1- Comenzar nuevo       │",
-            "│     torneo               │",
-            "│                          │",
-            "│  2- Combate 1v1          │",
-            "│                          │",
-            "│  3- Ganadores            │",
-            "│  historicos del torneo   │",
-            "│                          │",
-            "│  4- Salir                │",
-            "│                          │",
-            "└──────────────────────────┘"
-        };
-
-        CentrarLineas(lineasMenu);
     }
 
     public void MostrarPersonaje(Personaje personaje)
