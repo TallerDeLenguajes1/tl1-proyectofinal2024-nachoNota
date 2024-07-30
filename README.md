@@ -1,6 +1,7 @@
 # AVENGERS: A NEW MULTIVERSE
 ## Descripción general
-Este juego trata sobre un multiverso completamente nuevo en el que los personajes más poderosos del UCM pelean entre sí para poder quedarse con la victoria, y así dejar su nombre grabado en el recuerdo de todos. 
+Este juego trata sobre un multiverso completamente nuevo en el que los personajes más poderosos del UCM pelean entre sí para poder quedarse con la victoria, y así dejar su nombre grabado en el recuerdo de todos. Para este juego se ha utilizado una API de Marvel, la cual, entre mucha otra información, brinda el nombre y una breve descripción de los personajes mas icónicos de la franquicia. Si queres probarla, acá tenes el link:  
+https://developer.marvel.com/docs
 
 ## Mecánicas de juego
 Las mecánicas de juego son simples. Ingresas a nuestro juego y debes elegir una de las opciones para comenzar a batallar con el personaje que quieras. Tenemos dos opciones para batallar:  
@@ -26,3 +27,4 @@ Este proyecto presenta dos carpetas y distintas clases para asegurar el correcto
 - *HelperJson.cs*: Contiene metodos para poder abrir y guardar archivos JSON.
 - *LlamadaAPI:* *LlamadaAPI.cs*: Contiene la clase y métodos necesarios para realizar la llamada a la API de Marvel y obtener los datos de los personajes.
 - *ValidarOpciones:* En esta parte están todas las opciones que se deben tener en cuenta en el caso que el usuario ingrese un valor no válido dentro del contexto del juego.
+
