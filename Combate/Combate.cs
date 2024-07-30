@@ -27,7 +27,22 @@ namespace VentanaCombate
                 }
                 else
                 {
-                    await TurnoOponente(personajeActivo, oponenteActivo, oponente1, oponente2, movimientosPorClave);
+                    if (oponenteActivo.Caracteristicas.Salud <= 0 && oponenteActivo == oponente1)
+                    {
+                        oponenteActivo = IntercambiarPersonaje(oponente1, oponente2);
+                        await Task.Delay(2400);
+                        Console.Clear();
+                    }
+
+                    Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
+                    new FuncionesTexto().MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
+
+                    await Task.Delay(3000);
+
+                    Console.Clear();
+
+                    TurnoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
+
                     turno = true;
                 }
 
@@ -97,27 +112,7 @@ namespace VentanaCombate
             return turno;
         }
 
-        public async Task TurnoOponente(Personaje personajeActivo,ref Personaje oponenteActivo, Personaje oponente1, Personaje oponente2, Dictionary<int, Movimientos> movimientosPorClave)
-        {
-            if (oponenteActivo.Caracteristicas.Salud <= 0 && oponenteActivo == oponente1)
-            {
-                oponenteActivo = IntercambiarPersonaje(oponente1, oponente2);
-                await Task.Delay(2400);
-                Console.Clear();
-            }
-
-            Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
-            new FuncionesTexto().MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
-
-            await Task.Delay(3000);
-
-            Console.Clear();
-
-            RealizarMovimientoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
-
-        }
-
-        public void RealizarMovimientoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> movimientosPorClave)
+        public void TurnoOponente(Personaje Oponente, Personaje PersonajeElegido, Dictionary<int, Movimientos> movimientosPorClave)
         {
             if (Oponente.Caracteristicas.Mana <= 10)
             {
@@ -340,34 +335,6 @@ namespace VentanaCombate
             } else
             {
                 return personaje1.Caracteristicas.Salud > 0 || personaje2.Caracteristicas.Salud > 0;
-            }
-        }
-
-
-        public void GuardarCampeon(string nombreArchivo, Personaje campeon)
-        {
-            var jsonHelper = new HelperJson();
-            var listaCampeones = new List<Personaje>();
-
-            campeon.Datos.FechaCampeon = DateTime.Now;
-
-            if (!File.Exists(nombreArchivo))
-            {
-                listaCampeones.Add(campeon);
-                string stringJson = JsonSerializer.Serialize(listaCampeones);
-                jsonHelper.GuardarArchivo(nombreArchivo, stringJson);
-            }
-            else
-            {
-                string recuperadoJson = jsonHelper.AbrirArchivo(nombreArchivo);
-
-                var listaRecuperada = JsonSerializer.Deserialize<List<Personaje>>(recuperadoJson);
-
-                listaRecuperada.Add(campeon);
-
-                string stringJsonNuevo = JsonSerializer.Serialize(listaRecuperada);
-
-                jsonHelper.GuardarArchivo(nombreArchivo, stringJsonNuevo);
             }
         }
 

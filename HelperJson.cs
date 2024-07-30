@@ -4,6 +4,33 @@ using System.Text.Json;
 
 public class HelperJson
 {
+    public void GuardarCampeon(string nombreArchivo, Personaje campeon)
+    {
+        var jsonHelper = new HelperJson();
+        var listaCampeones = new List<Personaje>();
+
+        campeon.Datos.FechaCampeon = DateTime.Now;
+
+        if (!File.Exists(nombreArchivo))
+        {
+            listaCampeones.Add(campeon);
+            string stringJson = JsonSerializer.Serialize(listaCampeones);
+            jsonHelper.GuardarArchivo(nombreArchivo, stringJson);
+        }
+        else
+        {
+            string recuperadoJson = jsonHelper.AbrirArchivo(nombreArchivo);
+
+            var listaRecuperada = JsonSerializer.Deserialize<List<Personaje>>(recuperadoJson);
+
+            listaRecuperada.Add(campeon);
+
+            string stringJsonNuevo = JsonSerializer.Serialize(listaRecuperada);
+
+            jsonHelper.GuardarArchivo(nombreArchivo, stringJsonNuevo);
+        }
+    }
+
     public void GuardarArchivo(string nombreArchivo, string datos)
     {
         using (FileStream archivo = new FileStream(nombreArchivo, FileMode.Create))

@@ -11,6 +11,7 @@ var Texto = new FuncionesTexto();
 var Valid = new ValidarOpciones();
 var Combate = new Combate();
 var Fabrica = new FabricaDePersonajes();
+var helperJson = new HelperJson();
 var ListaNombresDescripciones = await APICLIENT.GetCharactersAsync();
 
 int OpcionMenu = 0;
@@ -111,7 +112,7 @@ do
                             await Task.Delay(1000);
                             await Texto.EscribirTextoAsync("\nPor cierto, acá estaré esperando por mi revancha...");
                             
-                            Combate.GuardarCampeon("CampeonesHistoricos.json", PersonajeElegido);
+                            helperJson.GuardarCampeon("CampeonesHistoricos.json", PersonajeElegido);
                         }
                         else
                         {
@@ -125,8 +126,8 @@ do
                             await Texto.EscribirTextoAsync("ah, casi se me olvida, he agregado el nombre de mi campeón a la lista de historicos, para que cada vez que entres puedas ver el dia exacto en el que perdiste");
                             await Task.Delay(1000);
                             Console.Write(" :D");
-  
-                            Combate.GuardarCampeon("CampeonesHistoricos.json", Oponente);
+
+                            helperJson.GuardarCampeon("CampeonesHistoricos.json", Oponente);
                         }
                     }
                     else
