@@ -26,6 +26,8 @@ namespace VentanaCombate
                     if(personajeActivo.Caracteristicas.Salud <= 0)
                     {
                         personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
+                        await Task.Delay(2400);
+                        Console.Clear();
                     }
 
                     turno = TurnoJugador(ref personajeActivo, oponenteActivo, elegido1, elegido2, movimientosPorClave);
@@ -342,6 +344,31 @@ namespace VentanaCombate
             } else
             {
                 return personaje1.Caracteristicas.Salud > 0 || personaje2.Caracteristicas.Salud > 0;
+            }
+        }
+
+        public void ElegirDificultad(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
+        {
+            Console.WriteLine("\nElegir dificultad: ");
+            Console.WriteLine("\t1 = Facil\n" +
+                                "\t2 = Normal\n" +
+                                "\t3 = Dificil");
+            Console.Write("Opcion: ");
+            int opcion = new ValidarOpciones().ValidarOpcion(3);
+            switch (opcion)
+            {
+                case 1: elegido1.Caracteristicas.SubirEstadisticasJugador();
+                    elegido2.Caracteristicas.SubirEstadisticasJugador();
+                    break;
+                case 2: oponente1.Caracteristicas.SubirNivelOponente();
+                    oponente2.Caracteristicas.SubirNivelOponente();
+                    break;
+                case 3: for(int i = 0; i < 2; i++)
+                    {
+                        oponente1.Caracteristicas.SubirNivelOponente();
+                        oponente2.Caracteristicas.SubirNivelOponente();
+                    }
+                    break;
             }
         }
 

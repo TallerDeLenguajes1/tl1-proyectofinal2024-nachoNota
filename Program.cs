@@ -165,12 +165,17 @@ do
                 Personaje SegundoElegido = Fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
 
                 Console.Clear();
+                
+                Personaje PrimerOponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
+                Personaje SegundoOponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
+
+                Combate.ElegirDificultad(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+
+                Console.Clear();
 
                 Console.WriteLine("Muy bien!! Tus oponentes en este caso serán: ");
                 await Task.Delay(2000);
 
-                Personaje PrimerOponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
-                Personaje SegundoOponente = Fabrica.PersonajeAleatorio(ListaDePersonajes);
                 Texto.MostrarPersonaje(PrimerOponente);
                 Texto.MostrarPersonaje(SegundoOponente);
                 await Task.Delay(8000);
