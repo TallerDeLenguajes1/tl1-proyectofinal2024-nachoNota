@@ -68,7 +68,7 @@ namespace VentanaCombate
         {
 
             Console.WriteLine("\t\nEs tu turno! Realiza un movimiento!\n");
-            new FuncionesTexto().MostrarDatosCombate(personajeActivo, oponenteActivo, movimientosPorClave);
+            MostrarDatosCombate(personajeActivo, oponenteActivo, movimientosPorClave);
 
             var (opcionElegida, movimientoElegido) = new ValidarOpciones().ValidarMovimiento(movimientosPorClave);
 
@@ -126,7 +126,7 @@ namespace VentanaCombate
         {
 
             Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
-            new FuncionesTexto().MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
+            MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
 
             Thread.Sleep(3000);
 
@@ -413,6 +413,32 @@ namespace VentanaCombate
                         oponente2.Caracteristicas.SubirNivelOponente();
                     }
                     break;
+            }
+        }
+
+        public void MostrarDatosCombate(Personaje atacante, Personaje defensor, Dictionary<int, Movimientos> movimientosPorClave)
+        {
+            Console.WriteLine($"| {atacante.Datos.Nombre.ToUpper()} |\n");
+            Console.WriteLine($"\tMana disponible: {atacante.Caracteristicas.Mana}\n");
+            Console.WriteLine($"\tSalud actual: {atacante.Caracteristicas.Salud}");
+            Console.WriteLine($"\tSalud del oponente: {defensor.Caracteristicas.Salud}\n");
+            MostrarMovimientos(movimientosPorClave);
+        }
+
+        public void MostrarMovimientos(Dictionary<int, Movimientos> movimientosPorClave)
+        {
+            int i = 1;
+            var categorias = movimientosPorClave.Values.GroupBy(m => m.Categoria); //Agrupo los movimientos segun sus categorias
+
+            foreach (var categoria in categorias)
+            {
+                Console.WriteLine($"\t──── {categoria.Key.ToUpper()} ────"); //Obtengo la clave del grupo (categoria)
+                foreach (var movimiento in categoria)
+                {
+                    Console.WriteLine($"\t{i}- '{movimiento.Nombre}' | {movimiento.Descripcion}");
+                    i++;
+                }
+                Console.WriteLine();
             }
         }
 

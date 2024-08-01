@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Text.Json;
 using MiProyecto.FabricaDePersonajes;
 using VentanaCombate;
 
@@ -8,12 +9,14 @@ public class Juego
 	private FabricaDePersonajes fabrica;
 	private ValidarOpciones validar;
     private HelperJson helperJson;
+    private Combate Combate;
 
 	public Juego()
 	{
 		fabrica = new FabricaDePersonajes();
 		validar = new ValidarOpciones();
         helperJson = new HelperJson();
+        Combate = new Combate();
     }
 
 	public async Task EmpezarNuevoJuego()
@@ -41,7 +44,7 @@ public class Juego
 						break;
 					case 2: NuevoCombate2v2(ListaDePersonajes);
 						break;
-					case 3: //MostrarCampeones();
+					case 3: MostrarListaCampeones();
 						break;
 				}
 			} else
@@ -53,17 +56,61 @@ public class Juego
             await Task.Delay(1000);
             Console.Write("\n\nPresione cualquier tecla para salir...");
             Console.ReadKey();
-
+            
+            Console.Clear();
         } while (opcionMenu != 4);
 	}
 
-	private void NuevoTorneo(List<Personaje> ListaDePersonajes)
+    //TORNEO
+	private void NuevoTorneo(List<Personaje> ListaDePersonajes) 
 	{
-        Console.WriteLine("hola");
-	}
+        MostrarPersonajes(ListaDePersonajes);
+        Console.Write("Con qué personaje quiere pelear? (ingresar su numero): ");
+        int opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
 
-	private void NuevoCombate2v2(List<Personaje> ListaDePersonajes)
-	{
+        Console.Clear();
+
+        Personaje PersonajeElegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+        Console.WriteLine($"\nMUY BIEN! El personaje elegido es: \n\n");
+        MostrarPersonaje(PersonajeElegido);
+        Thread.Sleep(4000);
+
+        Console.Clear();
+
+        //InstanciaCuartosTorneo(PersonajeElegido, ListaDePersonajes);
+
+        if (Combate.EsGanador(PersonajeElegido))
+        {
+          //  InstanciaSemifinalTorneo(PersonajeElegido, ListaDePersonajes);
+
+            if (Combate.EsGanador(PersonajeElegido))
+            {
+                InstanciaFinalTorneo(PersonajeElegido, ListaDePersonajes);
+            }
+            else
+            {
+                Console.WriteLine("\n\n");
+                EscribirTextoAsync("Bueno... Sabia que no llegarías mas lejos que esto.\n");
+                Thread.Sleep(1000);
+                EscribirTextoAsync("Al fin y al cabo, pocos fueron los que lograron enfrentarse a mi campeón mas fuerte\n");
+                Thread.Sleep(1000);
+                EscribirTextoAsync("Pero bueno, ¿quien te dice que en el próximo intento no llegarás más lejos? Acá estaré esperando...\n");
+            }
+        }
+        else
+        {
+            Console.WriteLine("\n\n");
+            EscribirTextoAsync("Rival complicado eh?\n");
+            Thread.Sleep(1000);
+            EscribirTextoAsync("No te preocupes, siempres puedes arrancar el torneo desde cero, solo trata de no perder la paciencia!\n");
+            Thread.Sleep(1000);
+            EscribirTextoAsync("Te deseo suerte para la proxima!!");
+        }
+    }
+
+    //COMBATE 2V2
+    private void NuevoCombate2v2(List<Personaje> ListaDePersonajes)
+    {
         MostrarPersonajes(ListaDePersonajes);
         Console.Write("Quién será tu primer peleador? (ingresar su numero): ");
         int opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
@@ -78,7 +125,7 @@ public class Juego
         Personaje SegundoElegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
 
         Console.Clear();
-        var Combate = new Combate();
+
         Personaje PrimerOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
         Personaje SegundoOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
 
@@ -95,6 +142,9 @@ public class Juego
 
         Console.Clear();
 
+        FraseIntroduccionCombate(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+        Console.Clear();
+
         Combate.NuevoCombate(PrimerElegido, PrimerOponente, SegundoElegido, SegundoOponente);
 
         if (EsGanador(PrimerElegido, SegundoElegido))
@@ -104,6 +154,111 @@ public class Juego
         else
         {
             AnunciarGanador(PrimerOponente, SegundoOponente, PrimerElegido, SegundoElegido);
+        }
+    }
+
+    //MOSTRAR CAMPEONES
+    private void MostrarListaCampeones()
+    {
+        string NombreArchivo = "CampeonesHistoricos.json";
+        string rutaCompleta = Path.GetFullPath(NombreArchivo);
+
+        if (!File.Exists(rutaCompleta))
+        {
+            Console.WriteLine("\n\nTodavia no tienes ningun campeón dentro de esta lista, prueba jugando nuestra modalidad de torneo para grabar el nombre de tus campeones en este sector!");
+        }
+        else
+        {
+            MostrarCampeones(NombreArchivo);
+        }
+    }
+
+    private void InstanciaCuartosTorneo(Personaje PersonajeElegido, List<Personaje> ListaDePersonajes)
+    {
+        Console.WriteLine("En cuartos de final tendras que enfrentarte a...\n");
+        Thread.Sleep(2000);
+
+        Personaje Oponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
+        MostrarPersonaje(Oponente);
+        Thread.Sleep(4000);
+
+        Console.Clear();
+
+        Combate.NuevoCombate(PersonajeElegido, Oponente);
+    }
+
+    private void InstanciaSemifinalTorneo(Personaje PersonajeElegido, List<Personaje> ListaDePersonajes)
+    {
+        EscribirTextoAsync("Felicidades, lograste avanzar a las semifinales de este torneo, pero no cantes victoria, las cosas de ahora en adelante se pondrán mas complicadas...\n\n");
+        Thread.Sleep(1000);
+        PersonajeElegido.Caracteristicas.SubirEstadisticasJugador();
+
+        Console.WriteLine("Para estas instancias, tu rival será...\n");
+        Thread.Sleep(2000);
+
+        Personaje Oponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
+        Oponente.Caracteristicas.SubirNivelOponente();
+
+        MostrarPersonaje(Oponente);
+        Thread.Sleep(4000);
+
+        Console.Clear();
+        
+        Combate.NuevoCombate(PersonajeElegido, Oponente);
+    }
+
+    private void InstanciaFinalTorneo(Personaje PersonajeElegido, List<Personaje> ListaDePersonajes)
+    {
+        EscribirTextoAsync("¿Que? ¿En serio llegaste a la final? La verdad que no me esperaba que llegues tan lejos, voy a tener que ponerte las cosas más complicadas...\n\n");
+        Thread.Sleep(1000);
+        PersonajeElegido.Caracteristicas.SubirEstadisticasJugador();
+
+        Console.WriteLine("Para estas instancias, tu rival será...\n");
+        Thread.Sleep(2000);
+
+        Personaje Oponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
+        for (int i = 0; i < 2; i++)
+        {
+            Oponente.Caracteristicas.SubirNivelOponente();
+        }
+        MostrarPersonaje(Oponente);
+        Thread.Sleep(4000);
+
+        Console.Clear();
+
+        //Combate.NuevoCombate(PersonajeElegido, Oponente);
+
+        VerificarCampeonTorneo(PersonajeElegido, Oponente);
+    }
+
+    private void VerificarCampeonTorneo(Personaje PersonajeElegido, Personaje Oponente)
+    {
+        if (Combate.EsGanador(PersonajeElegido))
+        {
+            LogoCampeon();
+            Console.WriteLine("\n\n");
+            EscribirTextoAsync("EN SERIO???? TE PUSE A MI MEJOR PELEADOR Y NO PUDO HACERTE NADA???");
+            Thread.Sleep(1000);
+            EscribirTextoAsync($" Bueno, supongo que tu nombre, {PersonajeElegido.Datos.Nombre}, merece estar en nuestro listado de campeones historicos, te lo ganaste.");
+            Thread.Sleep(1000);
+            EscribirTextoAsync("\nPor cierto, acá estaré esperando por mi revancha...");
+
+            GuardarCampeon("CampeonesHistoricos.json", PersonajeElegido);
+        }
+        else
+        {
+            Console.WriteLine("\n\n");
+            EscribirTextoAsync("JAAAAAAAAAAAAAAAAAAAAAAAA JA JA JA JA JA JA\n");
+            Thread.Sleep(1000);
+            EscribirTextoAsync("ah, perdon. Donde estan mis modales...\n");
+            Thread.Sleep(1000);
+            EscribirTextoAsync("Te felicito por haber llegado tan lejos, pocos héroes logran estar donde estás parado ahora mismo, lástima que tuviste que verte las caras con mi peleador mas fuerte.\n");
+            Thread.Sleep(1000);
+            EscribirTextoAsync("ah, casi se me olvida, he agregado el nombre de mi campeón a la lista de historicos, para que cada vez que entres puedas ver el dia exacto en el que perdiste");
+            Thread.Sleep(1000);
+            Console.Write(" :D");
+
+            GuardarCampeon("CampeonesHistoricos.json", Oponente);
         }
     }
 
@@ -125,6 +280,48 @@ public class Juego
         else
         {
             return personaje1.Caracteristicas.Salud > 0 || personaje2.Caracteristicas.Salud > 0;
+        }
+    }
+
+    private void MostrarCampeones(string nombreArchivo)
+    {
+        string stringjson = helperJson.AbrirArchivo(nombreArchivo);
+
+        var listaCampeones = JsonSerializer.Deserialize<List<Personaje>>(stringjson);
+
+        CartelCampeones();
+        Console.WriteLine("\n");
+        foreach (var campeon in listaCampeones)
+        {
+            Console.WriteLine($"Se consagró victorioso el {campeon.Datos.FechaCampeon.ToString("dd/MM/yy")} a las {campeon.Datos.FechaCampeon.ToString("HH:mm tt")}");
+            MostrarPersonaje(campeon);
+            Console.WriteLine("\n");
+        }
+    }
+
+    private void GuardarCampeon(string nombreArchivo, Personaje campeon)
+    {
+        var listaCampeones = new List<Personaje>();
+
+        campeon.Datos.FechaCampeon = DateTime.Now;
+
+        if (!File.Exists(nombreArchivo))
+        {
+            listaCampeones.Add(campeon);
+            string stringJson = JsonSerializer.Serialize(listaCampeones);
+            helperJson.GuardarArchivo(nombreArchivo, stringJson);
+        }
+        else
+        {
+            string recuperadoJson = helperJson.AbrirArchivo(nombreArchivo);
+
+            var listaRecuperada = JsonSerializer.Deserialize<List<Personaje>>(recuperadoJson);
+
+            listaRecuperada.Add(campeon);
+
+            string stringJsonNuevo = JsonSerializer.Serialize(listaRecuperada);
+
+            helperJson.GuardarArchivo(nombreArchivo, stringJsonNuevo);
         }
     }
 
@@ -169,6 +366,36 @@ public class Juego
         CentrarLineas(lineasMenu);
     }
 
+    private void CartelCampeones()
+    {
+        string[] campeonesLineas =
+        {
+        " _  ____                                                 _ ",
+        "| |/ ___|__ _ _ __ ___  _ __   ___  ___  _ __   ___  ___| |",
+        "| | |   / _` | '_ ` _ \\| '_ \\ / _ \\/ _ \\| '_ \\ / _ \\/ __| |",
+        "| | |__| (_| | | | | | | |_) |  __/ (_) | | | |  __/\\__ \\ |",
+        "| |\\____\\__,_|_| |_| |_| .__/ \\___|\\___/|_| |_|\\___||___/ |",
+        "|_|                    |_|                              |_|"
+    };
+
+        CentrarLineas(campeonesLineas);
+    }
+
+    public void LogoCampeon()
+    {
+        string[] campeonLineas = {
+        "   ____     _      __  __    ____   U _____ u U  ___ u  _   _    ",
+        "U /\"___|U  /\"\\  uU|' \\/ '|uU|  _\"\\ u\\| ___\"|/  \\/\"_ \\/ | \\ |\"|   ",
+        "\\| | u   \\/ _ \\/ \\| |\\/| |/\\| |_) |/ |  _|\"    | | | |<|  \\| |>  ",
+        " | |/__  / ___ \\  | |  | |  |  __/   | |___.-,_| |_| |U| |\\  |u  ",
+        "  \\____|/_/   \\_\\ |_|  |_|  |_|      |_____|\\_)-\\___/  |_| \\_|   ",
+        " _// \\\\  \\\\    >><<,-,,-.   ||>>_    <<   >>     \\\\    ||   \\\\,-.",
+        "(__)(__)(__)  (__)(./  \\.) (__)__)  (__) (__)   (__)   (_\")  (_/ "
+        };
+
+        CentrarLineas(campeonLineas);
+    }
+
     private void MostrarPersonaje(Personaje personaje)
     {
         Console.WriteLine(CentrarLinea($"═══════════════════════════════════════════ {personaje.Datos.Nombre} ═══════════════════════════════════════════"));
@@ -194,7 +421,7 @@ public class Juego
         }
     }
 
-    public void FraseIntroduccionCombate(Personaje atacante1, Personaje atacante2, Personaje oponente1, Personaje oponente2)
+    private void FraseIntroduccionCombate(Personaje atacante1, Personaje atacante2, Personaje oponente1, Personaje oponente2)
     {
         int random = new Random().Next(6);
         switch (random)
@@ -222,7 +449,7 @@ public class Juego
         Thread.Sleep(2000);
     }
 
-    public void AnunciarGanador(Personaje campeon1, Personaje campeon2, Personaje perdedor1, Personaje perdedor2)
+    private void AnunciarGanador(Personaje campeon1, Personaje campeon2, Personaje perdedor1, Personaje perdedor2)
     {
         int random = new Random().Next(5);
         switch (random)
@@ -245,7 +472,7 @@ public class Juego
         }
     }
 
-    public void EscribirTextoAsync(string text)
+    private void EscribirTextoAsync(string text)
     {
         foreach (char c in text)
         {
