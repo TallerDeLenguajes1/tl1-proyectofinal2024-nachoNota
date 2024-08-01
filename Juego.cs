@@ -1,15 +1,136 @@
-using System;
-using MovimientosCombate;
+﻿using System;
+using System.Threading.Tasks;
 using MiProyecto.FabricaDePersonajes;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text.Json;
+using VentanaCombate;
 
-public class FuncionesTexto
+public class Juego
 {
-    public void Logo()
+	private FabricaDePersonajes fabrica;
+	private ValidarOpciones validar;
+    private HelperJson helperJson;
+
+	public Juego()
+	{
+		fabrica = new FabricaDePersonajes();
+		validar = new ValidarOpciones();
+        helperJson = new HelperJson();
+    }
+
+	public async Task EmpezarNuevoJuego()
+	{
+		int opcionMenu = 0;
+		do
+		{
+			MostrarLogo();
+			MostrarMenu();
+			
+			Console.WriteLine();
+
+			Console.Write(CentrarLinea("Elija una de las opciones: "));
+			opcionMenu = validar.ValidarOpcion(4);
+
+            Console.Clear();
+
+			if(opcionMenu != 4)
+			{
+				var ListaDePersonajes = await fabrica.CrearListaPersonajes();
+
+				switch (opcionMenu)
+				{
+					case 1: NuevoTorneo(ListaDePersonajes);
+						break;
+					case 2: NuevoCombate2v2(ListaDePersonajes);
+						break;
+					case 3: //MostrarCampeones();
+						break;
+				}
+			} else
+			{
+                Console.WriteLine("Esperamos que vuelvas a jugar pronto, suerte!");
+                Thread.Sleep(3000);
+            }
+
+            await Task.Delay(1000);
+            Console.Write("\n\nPresione cualquier tecla para salir...");
+            Console.ReadKey();
+
+        } while (opcionMenu != 4);
+	}
+
+	private void NuevoTorneo(List<Personaje> ListaDePersonajes)
+	{
+        Console.WriteLine("hola");
+	}
+
+	private void NuevoCombate2v2(List<Personaje> ListaDePersonajes)
+	{
+        MostrarPersonajes(ListaDePersonajes);
+        Console.Write("Quién será tu primer peleador? (ingresar su numero): ");
+        int opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
+        Personaje PrimerElegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+
+        Console.Clear();
+        Thread.Sleep(1000);
+
+        MostrarPersonajes(ListaDePersonajes);
+        Console.Write("Pongamosle un compañero a tu peleador, quien será?: ");
+        opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
+        Personaje SegundoElegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+
+        Console.Clear();
+        var Combate = new Combate();
+        Personaje PrimerOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
+        Personaje SegundoOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
+
+        Combate.ElegirDificultad(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+
+        Console.Clear();
+
+        Console.WriteLine("Muy bien!! Tus oponentes en este caso serán: ");
+        Thread.Sleep(2000);
+
+        MostrarPersonaje(PrimerOponente);
+        MostrarPersonaje(SegundoOponente);
+        Thread.Sleep(6000);
+
+        Console.Clear();
+
+        Combate.NuevoCombate(PrimerElegido, PrimerOponente, SegundoElegido, SegundoOponente);
+
+        if (EsGanador(PrimerElegido, SegundoElegido))
+        {
+            AnunciarGanador(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+        }
+        else
+        {
+            AnunciarGanador(PrimerOponente, SegundoOponente, PrimerElegido, SegundoElegido);
+        }
+    }
+
+    private void MostrarOpcionesDificultad()
     {
-        string[] logoLineas = {
+        Console.WriteLine("\nElegir dificultad: ");
+        Console.WriteLine("\t1 = Facil\n" +
+                            "\t2 = Normal\n" +
+                            "\t3 = Dificil");
+        Console.Write("Opcion: ");
+    }
+
+    private bool EsGanador(Personaje personaje1, Personaje personaje2 = null)
+    {
+        if (personaje2 == null)
+        {
+            return personaje1.Caracteristicas.Salud > 0;
+        }
+        else
+        {
+            return personaje1.Caracteristicas.Salud > 0 || personaje2.Caracteristicas.Salud > 0;
+        }
+    }
+
+    private void MostrarLogo()
+	{
+            string[] logoLineas = {
         "╔═════════════════════════════════════════════╗",
         "║                                             ║",
         "║                                             ║",
@@ -21,12 +142,11 @@ public class FuncionesTexto
         "║                                             ║",
         "║                                             ║",
         "╚═════════════════════════════════════════════╝"
-    };
-
+        };
         CentrarLineas(logoLineas);
     }
 
-    public void Menu()
+    private void MostrarMenu()
     {
         Console.WriteLine("\n");
         string[] lineasMenu = {
@@ -46,55 +166,31 @@ public class FuncionesTexto
             "│                          │",
             "└──────────────────────────┘"
         };
-
         CentrarLineas(lineasMenu);
     }
 
-    public void LogoCampeon()
+    private void MostrarPersonaje(Personaje personaje)
     {
-        string[] campeonLineas = {
-        "   ____     _      __  __    ____   U _____ u U  ___ u  _   _    ",
-        "U /\"___|U  /\"\\  uU|' \\/ '|uU|  _\"\\ u\\| ___\"|/  \\/\"_ \\/ | \\ |\"|   ",
-        "\\| | u   \\/ _ \\/ \\| |\\/| |/\\| |_) |/ |  _|\"    | | | |<|  \\| |>  ",
-        " | |/__  / ___ \\  | |  | |  |  __/   | |___.-,_| |_| |U| |\\  |u  ",
-        "  \\____|/_/   \\_\\ |_|  |_|  |_|      |_____|\\_)-\\___/  |_| \\_|   ",
-        " _// \\\\  \\\\    >><<,-,,-.   ||>>_    <<   >>     \\\\    ||   \\\\,-.",
-        "(__)(__)(__)  (__)(./  \\.) (__)__)  (__) (__)   (__)   (_\")  (_/ "
-        };
-        
-        CentrarLineas(campeonLineas);
+        Console.WriteLine(CentrarLinea($"═══════════════════════════════════════════ {personaje.Datos.Nombre} ═══════════════════════════════════════════"));
+        Console.WriteLine($"║ Descripcion: {personaje.Datos.Descripcion}\n" +
+                            $"║ Nivel:    {personaje.Caracteristicas.Nivel}\n" +
+                            $"║ Salud:    {personaje.Caracteristicas.Salud}\n" +
+                            $"║ Mana:     {personaje.Caracteristicas.Mana}\n" +
+                            $"║ Daño:     {personaje.Caracteristicas.Daño}\n" +
+                            $"║ Defensa:  {personaje.Caracteristicas.Defensa}\n" +
+                            $"║ Precision:  {personaje.Caracteristicas.Precision}%");
+        Console.WriteLine(CentrarLinea($"═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════"));
     }
 
-    public void CartelCampeones()
+    private void MostrarPersonajes(List<Personaje> ListaPersonajes)
     {
-        string[] campeonesLineas =
+        int i = 1;
+        foreach (var personaje in ListaPersonajes)
         {
-        " _  ____                                                 _ ",
-        "| |/ ___|__ _ _ __ ___  _ __   ___  ___  _ __   ___  ___| |",
-        "| | |   / _` | '_ ` _ \\| '_ \\ / _ \\/ _ \\| '_ \\ / _ \\/ __| |",
-        "| | |__| (_| | | | | | | |_) |  __/ (_) | | | |  __/\\__ \\ |",
-        "| |\\____\\__,_|_| |_| |_| .__/ \\___|\\___/|_| |_|\\___||___/ |",
-        "|_|                    |_|                              |_|"
-    };
-
-        CentrarLineas(campeonesLineas);
-    }
-
-
-    public void MostrarCampeones(string nombreArchivo)
-    {
-        var helperJson = new HelperJson();
-        string stringjson = helperJson.AbrirArchivo(nombreArchivo);
-
-        var listaCampeones = JsonSerializer.Deserialize<List<Personaje>>(stringjson);
-
-        CartelCampeones();
-        Console.WriteLine("\n");
-        foreach(var campeon in listaCampeones)
-        {
-            Console.WriteLine($"Se consagró victorioso el {campeon.Datos.FechaCampeon.ToString("dd/MM/yy")} a las {campeon.Datos.FechaCampeon.ToString("HH:mm tt")}");
-            MostrarPersonaje(campeon);
+            Console.WriteLine(CentrarLinea($"Opcion: {i}"));
+            MostrarPersonaje(personaje);
             Console.WriteLine("\n");
+            i++;
         }
     }
 
@@ -149,58 +245,6 @@ public class FuncionesTexto
         }
     }
 
-
-    public void MostrarDatosCombate(Personaje atacante, Personaje defensor, Dictionary<int, Movimientos> movimientosPorClave)
-    {
-        Console.WriteLine($"| {atacante.Datos.Nombre.ToUpper()} |\n");
-        Console.WriteLine($"\tMana disponible: {atacante.Caracteristicas.Mana}\n");
-        Console.WriteLine($"\tSalud actual: {atacante.Caracteristicas.Salud}");
-        Console.WriteLine($"\tSalud del oponente: {defensor.Caracteristicas.Salud}\n");
-        MostrarMovimientos(movimientosPorClave);
-    }
-
-    public void MostrarPersonaje(Personaje personaje)
-    {
-        Console.WriteLine(CentrarLinea($"═══════════════════════════════════════════ {personaje.Datos.Nombre} ═══════════════════════════════════════════"));
-        Console.WriteLine(  $"║ Descripcion: {personaje.Datos.Descripcion}\n" +
-                            $"║ Nivel:    {personaje.Caracteristicas.Nivel}\n" +
-                            $"║ Salud:    {personaje.Caracteristicas.Salud}\n" +
-                            $"║ Mana:     {personaje.Caracteristicas.Mana}\n" +
-                            $"║ Daño:     {personaje.Caracteristicas.Daño}\n" +
-                            $"║ Defensa:  {personaje.Caracteristicas.Defensa}\n" +
-                            $"║ Precision:  {personaje.Caracteristicas.Precision}%");
-        Console.WriteLine(CentrarLinea($"═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════"));
-    }
-
-    public void MostrarPersonajes(List<Personaje> ListaPersonajes)
-    {
-        int i = 1;
-        foreach (var personaje in ListaPersonajes)
-        {
-            Console.WriteLine(CentrarLinea($"Opcion: {i}"));
-            MostrarPersonaje(personaje);
-            Console.WriteLine("\n");
-            i++;
-        }
-    }
-
-    public void MostrarMovimientos(Dictionary<int, Movimientos> movimientosPorClave)
-    {
-        int i = 1;
-        var categorias = movimientosPorClave.Values.GroupBy(m => m.Categoria); //Agrupo los movimientos segun sus categorias
-
-        foreach(var categoria in categorias)
-        {
-            Console.WriteLine($"\t──── {categoria.Key.ToUpper()} ────"); //Obtengo la clave del grupo (categoria)
-            foreach(var movimiento in categoria)
-            {
-                Console.WriteLine($"\t{i}- '{movimiento.Nombre}' | {movimiento.Descripcion}");
-                i++;
-            }
-            Console.WriteLine();
-        }
-    }
-
     public void EscribirTextoAsync(string text)
     {
         foreach (char c in text)
@@ -209,11 +253,13 @@ public class FuncionesTexto
             Thread.Sleep(40); // Pausa entre cada letra
         }
     }
-    public string CentrarLinea(string texto){
+
+    private string CentrarLinea(string texto)
+    {
         return String.Format("{0," + ((Console.WindowWidth / 2) + (texto.Length / 2)) + "}", texto);
     }
 
-    public void CentrarLineas(string[] lineas)
+    private void CentrarLineas(string[] lineas)
     {
         int consoleWidth = Console.WindowWidth; // Obtengo el ancho de la terminal
 

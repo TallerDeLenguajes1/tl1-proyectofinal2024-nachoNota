@@ -14,11 +14,13 @@ namespace MiProyecto.FabricaDePersonajes
             return NuevoPersonaje;
         }
 
-        public List<Personaje> CrearListaPersonajes(Raiz raiz)
+        public async Task<List<Personaje>> CrearListaPersonajes()
         {
-            if(raiz != null)
+            Raiz listaNombreDescripciones = await APICLIENT.GetCharactersAsync();
+
+            if(listaNombreDescripciones != null)
             {  
-                return ListaCreadaApi(raiz);
+                return ListaCreadaApi(listaNombreDescripciones);
             }
             else
             {
