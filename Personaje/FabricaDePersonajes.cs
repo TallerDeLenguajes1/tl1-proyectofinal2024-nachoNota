@@ -16,7 +16,7 @@ namespace MiProyecto.FabricaDePersonajes
 
         public async Task<List<Personaje>> CrearListaPersonajes()
         {
-            Raiz listaNombreDescripciones = await APICLIENT.GetCharactersAsync();
+            Raiz listaNombreDescripciones = await ObtenerDatosApi();
 
             if(listaNombreDescripciones != null)
             {  
@@ -84,6 +84,34 @@ namespace MiProyecto.FabricaDePersonajes
             string stringJson = JsonSerializer.Serialize(listaDatos);
 
             helperJson.GuardarArchivo(nombreArchivo, stringJson);
+        }
+
+        public static async Task<Raiz> ObtenerDatosApi()
+        {
+            string publicKey = "650b489211f65652098aedd5afbb79bf";
+            string hash = "abde502c3b8786278606247295cf4767";
+            string baseUrl = "https://gateway.marvel.com:443/v1/public/";
+
+            try
+            {
+                HttpClient client = new HttpClient
+                {
+                    Timeout = TimeSpan.FromSeconds(5) //pongo 5 segundos de tiempo de espera
+                };
+
+                string url = $"{baseUrl}characters?comics=32477&limit=13&offset=1&ts=1&apikey={publicKey}&hash={hash}";
+                HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var personajes = JsonSerializer.Deserialize<Raiz>(responseBody);
+                return personajes;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Se produjo un error inesperado: " + e.Message);
+                return null;
+            }
         }
 
         public Personaje PersonajeAleatorio(List<Personaje> listaDePersonajes)
