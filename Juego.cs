@@ -90,7 +90,7 @@ public class Juego
             else
             {
                 Console.WriteLine("\n\n");
-                EscribirTextoAsync("Bueno... Sabia que no llegarías mas lejos que esto.\n");
+                EscribirTextoAsync("Bueno... Sabía que no llegarías mas lejos que esto.\n");
                 Thread.Sleep(1000);
                 EscribirTextoAsync("Al fin y al cabo, pocos fueron los que lograron enfrentarse a mi campeón mas fuerte\n");
                 Thread.Sleep(1000);
@@ -226,7 +226,7 @@ public class Juego
 
         Console.Clear();
 
-        //Combate.NuevoCombate(PersonajeElegido, Oponente);
+        Combate.NuevoCombate(PersonajeElegido, Oponente);
 
         VerificarCampeonTorneo(PersonajeElegido, Oponente);
     }
@@ -262,7 +262,7 @@ public class Juego
         }
     }
 
-    public void ElegirDificultad(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
+    private void ElegirDificultad(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
     {
         MostrarOpcionesDificultad();
         int opcion = new ValidarOpciones().ValidarOpcion(3);
@@ -405,7 +405,7 @@ public class Juego
         CentrarLineas(campeonesLineas);
     }
 
-    public void LogoCampeon()
+    private void LogoCampeon()
     {
         string[] campeonLineas = {
         "   ____     _      __  __    ____   U _____ u U  ___ u  _   _    ",

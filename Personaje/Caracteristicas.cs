@@ -4,39 +4,30 @@ namespace CaracteristicasPersonaje
 {
     public class Caracteristicas
     {
-        private int valorBase {  get; set; }
-        private int salud { get; set; }
-        private int daño { get; set; }
-        private int defensa { get; set; }
-        private int mana { get; set; }
-        private int nivel { get; set; }
-        private int agilidad { get; set; }
-        private int fuerza { get; set; }
-        private int precision { get; set; }
-        private int resistencia { get; set; }
+        private int valorBase;
+        private int agilidad;
+        private int resistencia;
+        private int fuerza;
 
-        public int Salud { get => salud; set => salud = value; }
-        public int Daño { get => daño; set => daño = value; }
-        public int Defensa { get => defensa; set => defensa = value; }
-        public int Mana { get => mana; set => mana = value; }
-        public int Nivel { get => nivel; set => nivel = value; }
-        public int Agilidad { get => agilidad; set => agilidad = value; }
-        public int Fuerza { get => fuerza; set => fuerza = value; }
-        public int Precision { get => precision; set => precision = value; }
-        public int Resistencia { get => resistencia; set => resistencia = value; }
+        public int Salud { get; set; }
+        public int Daño { get; set; }
+        public int Defensa { get; set; }
+        public int Mana { get; set; }
+        public int Nivel { get; set; }
+        public int Precision { get; set; }
 
         public Caracteristicas()
         {
             valorBase = 100;
-            salud = valorBase;
-            mana = valorBase;
-            nivel = 1;
+            Salud = valorBase;
+            Mana = valorBase;
+            Nivel = 1;
             agilidad = GenerarAleatorio(12, 19);
             fuerza = GenerarAleatorio(15, 24);
-            precision = GenerarAleatorio(21, 26);
+            Precision = GenerarAleatorio(21, 26);
             resistencia = GenerarAleatorio(10, 20);
-            defensa = CalcularDefensa();
-            daño = CalcularDaño(); 
+            Defensa = CalcularDefensa();
+            Daño = CalcularDaño(); 
         }
 
         public int GenerarAleatorio(int min, int max)
@@ -52,7 +43,7 @@ namespace CaracteristicasPersonaje
             double multiplicadorPrecision = 0.1;
             int componenteAleatorio = GenerarAleatorio(1, 4);
 
-            return (int)(dañoBase + (fuerza * multiplicadorFuerza) + (agilidad * multiplicadorAgilidad) + (precision * multiplicadorPrecision) + componenteAleatorio);
+            return (int)(dañoBase + (fuerza * multiplicadorFuerza) + (agilidad * multiplicadorAgilidad) + (Precision * multiplicadorPrecision) + componenteAleatorio);
         }
 
         public int CalcularDefensa()
@@ -66,31 +57,31 @@ namespace CaracteristicasPersonaje
 
         public void BalancearEstadisticas()
         {
-            if(daño <= 23 && defensa <= 26)
+            if(Daño <= 23 && Defensa <= 26)
             {
-                daño += 2;
-                defensa += 3;
+                Daño += 2;
+                Defensa += 3;
             }
         }
 
         public void ReestablecerEstadisticas()
         {
-            salud = 100;
-            mana = valorBase;
+            Salud = 100;
+            Mana = valorBase;
         }
 
         public void SubirNivelOponente()
         {
-            nivel++;
+            Nivel++;
 
-            salud += 10;
-            mana += 5;
+            Salud += 10;
+            Mana += 5;
 
             agilidad += GenerarAleatorio(4, 7);
             fuerza += GenerarAleatorio(2, 5);
-            precision += GenerarAleatorio(2, 5);
+            Precision += GenerarAleatorio(2, 5);
             
-            daño = CalcularDaño();
+            Daño = CalcularDaño();
         }
 
         public void SubirEstadisticasJugador()
@@ -99,23 +90,23 @@ namespace CaracteristicasPersonaje
 
             valorBase += 10;
 
-            mana = valorBase;
-            precision += 5;
+            Mana = valorBase;
+            Precision += 5;
         }
 
         public void SubirNivel()
         {
-            nivel++;
+            Nivel++;
 
-            salud += 10;
-            mana += 5;
+            Salud += 10;
+            Mana += 5;
             agilidad += GenerarAleatorio(2, 5);
             fuerza += GenerarAleatorio(2, 5);
-            precision += GenerarAleatorio(2, 5);
+            Precision += GenerarAleatorio(2, 5);
             resistencia += GenerarAleatorio(2, 5);
 
-            daño = CalcularDaño();
-            defensa = CalcularDefensa();
+            Daño = CalcularDaño();
+            Defensa = CalcularDefensa();
         }
     }
 }

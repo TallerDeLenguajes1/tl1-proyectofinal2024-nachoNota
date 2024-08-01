@@ -33,7 +33,7 @@ namespace MiProyecto.FabricaDePersonajes
             var listaPersonajes = new List<Personaje>();
             foreach (var Personaje in raiz.data.Resultados)
             {
-                if (!string.IsNullOrEmpty(Personaje.Descripcion))
+                if (Personaje.Descripcion != string.Empty)
                 {
                     var PersonajeCreado = CrearPersonaje(new Datos(Personaje.Nombre, Personaje.Descripcion));
                     PersonajeCreado.Caracteristicas.BalancearEstadisticas();
@@ -132,17 +132,13 @@ namespace MiProyecto.FabricaDePersonajes
 
     public class Personaje
     {
-            
-        private Datos datos { get; set; }
-        private Caracteristicas caracteristicas { get; set; }
-
-        public Datos Datos { get => datos; set => datos = value; }
-        public Caracteristicas Caracteristicas { get => caracteristicas; set => caracteristicas = value; }
+        public Datos Datos { get; set; }
+        public Caracteristicas Caracteristicas { get; set; }
 
         public Personaje(Datos datos, Caracteristicas caracteristicas)
         {
-            this.datos = datos;
-            this.caracteristicas = caracteristicas;
+            Datos = datos;
+            Caracteristicas = caracteristicas;
         }
     }
 }

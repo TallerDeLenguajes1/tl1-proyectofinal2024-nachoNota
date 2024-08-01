@@ -6,20 +6,25 @@ namespace VentanaCombate
 {
     public class Combate
     {
-        /*      private Personaje elegido1
-                private Personaje oponente1 
-                private Personaje elegido2 
-                private Personaje oponente2 
+/*        private Personaje elegido1
+        private Personaje oponente1 
+        private Personaje elegido2 
+        private Personaje oponente2 
 
-                public Combate(Personaje elegido1, Personaje oponente1, Personaje elegido2, Personaje oponente2)
-                {
-                    this.elegido1 = elegido1;
-                }
+        public Combate(Personaje elegido1, Personaje oponente1, Personaje elegido2, Personaje oponente2)
+        {
+            this.elegido1 = elegido1;
+            this.oponente1 = oponente1;
+            this.elegido2 = elegido2;
+            this.oponente2 = oponente2;
+        }
 
-                public Combate(Personaje elegido1, Personaje oponente1)
-                {
+        public Combate(Personaje elegido1, Personaje oponente1)
+        {
+            this.elegido1 = elegido1;
+            this.oponente1 = oponente1;
+        }*/
 
-                }*/
         public void NuevoCombate(Personaje elegido1, Personaje oponente1, Personaje elegido2 = null, Personaje oponente2 = null)
         {
             var movimientosPorClave = CrearClavesMovimientos();
