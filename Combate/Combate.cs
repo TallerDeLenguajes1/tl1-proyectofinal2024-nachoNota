@@ -37,15 +37,29 @@ namespace VentanaCombate
             {
                 if (turno)
                 {
-                    turno = TurnoJugador(personajeActivo, oponenteActivo, elegido1, elegido2, movimientosPorClave);
+                    if (personajeActivo.Caracteristicas.Salud <= 0)
+                    {
+                        personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
+                        Thread.Sleep(2400);
+                        Console.Clear();
+                    }
+
+                    turno = TurnoJugador(ref personajeActivo, oponenteActivo, elegido1, elegido2, movimientosPorClave);
                 }
                 else
                 {
-                    await TurnoOponente(personajeActivo, oponenteActivo, oponente1, oponente2, movimientosPorClave);
+                    if (oponenteActivo.Caracteristicas.Salud <= 0 && oponenteActivo == oponente1)
+                    {
+                        oponenteActivo = IntercambiarPersonaje(oponente1, oponente2);
+                        Thread.Sleep(2400);
+                        Console.Clear();
+                    }
+
+                    TurnoOponente(oponenteActivo, personajeActivo, movimientosPorClave);
+
                     turno = true;
                 }
-
-                await Task.Delay(2400);
+                Thread.Sleep(2400);
                 Console.Clear();
             }
         }
@@ -107,9 +121,8 @@ namespace VentanaCombate
             return turno;
         }
 
-        public async Task TurnoOponente(Personaje personajeActivo,ref Personaje oponenteActivo, Personaje oponente1, Personaje oponente2, Dictionary<int, Movimientos> movimientosPorClave)
+        public void TurnoOponente(Personaje oponenteActivo, Personaje personajeActivo, Dictionary<int, Movimientos> movimientosPorClave)
         {
-
             Console.WriteLine("\t\nAhora estas viendo la pantalla del oponente, espera a que realice un movimiento...\n");
             MostrarDatosCombate(oponenteActivo, personajeActivo, movimientosPorClave);
 
@@ -373,31 +386,29 @@ namespace VentanaCombate
             }
         }
 
-
-        public void GuardarCampeon(string nombreArchivo, Personaje campeon)
+        public void MostrarDatosCombate(Personaje atacante, Personaje defensor, Dictionary<int, Movimientos> movimientosPorClave)
         {
-            var jsonHelper = new HelperJson();
-            var listaCampeones = new List<Personaje>();
+            Console.WriteLine($"| {atacante.Datos.Nombre.ToUpper()} |\n");
+            Console.WriteLine($"\tMana disponible: {atacante.Caracteristicas.Mana}\n");
+            Console.WriteLine($"\tSalud actual: {atacante.Caracteristicas.Salud}");
+            Console.WriteLine($"\tSalud del oponente: {defensor.Caracteristicas.Salud}\n");
+            MostrarMovimientos(movimientosPorClave);
+        }
 
-            campeon.Datos.FechaCampeon = DateTime.Now;
+        public void MostrarMovimientos(Dictionary<int, Movimientos> movimientosPorClave)
+        {
+            int i = 1;
+            var categorias = movimientosPorClave.Values.GroupBy(m => m.Categoria); //Agrupo los movimientos segun sus categorias
 
-            if (!File.Exists(nombreArchivo))
+            foreach (var categoria in categorias)
             {
-                listaCampeones.Add(campeon);
-                string stringJson = JsonSerializer.Serialize(listaCampeones);
-                jsonHelper.GuardarArchivo(nombreArchivo, stringJson);
-            }
-            else
-            {
-                string recuperadoJson = jsonHelper.AbrirArchivo(nombreArchivo);
-
-                var listaRecuperada = JsonSerializer.Deserialize<List<Personaje>>(recuperadoJson);
-
-                listaRecuperada.Add(campeon);
-
-                string stringJsonNuevo = JsonSerializer.Serialize(listaRecuperada);
-
-                jsonHelper.GuardarArchivo(nombreArchivo, stringJsonNuevo);
+                Console.WriteLine($"\t──── {categoria.Key.ToUpper()} ────"); //Obtengo la clave del grupo (categoria)
+                foreach (var movimiento in categoria)
+                {
+                    Console.WriteLine($"\t{i}- '{movimiento.Nombre}' | {movimiento.Descripcion}");
+                    i++;
+                }
+                Console.WriteLine();
             }
         }
 

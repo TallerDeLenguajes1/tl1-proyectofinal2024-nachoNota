@@ -53,7 +53,7 @@ public class Juego
                 Thread.Sleep(3000);
             }
 
-            await Task.Delay(1000);
+            Thread.Sleep(1000);
             Console.Write("\n\nPresione cualquier tecla para salir...");
             Console.ReadKey();
             
@@ -77,11 +77,11 @@ public class Juego
 
         Console.Clear();
 
-        //InstanciaCuartosTorneo(PersonajeElegido, ListaDePersonajes);
+        InstanciaCuartosTorneo(PersonajeElegido, ListaDePersonajes);
 
         if (Combate.EsGanador(PersonajeElegido))
         {
-          //  InstanciaSemifinalTorneo(PersonajeElegido, ListaDePersonajes);
+          InstanciaSemifinalTorneo(PersonajeElegido, ListaDePersonajes);
 
             if (Combate.EsGanador(PersonajeElegido))
             {
@@ -129,7 +129,7 @@ public class Juego
         Personaje PrimerOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
         Personaje SegundoOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
 
-        Combate.ElegirDificultad(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+        ElegirDificultad(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
 
         Console.Clear();
 
@@ -259,6 +259,30 @@ public class Juego
             Console.Write(" :D");
 
             GuardarCampeon("CampeonesHistoricos.json", Oponente);
+        }
+    }
+
+    public void ElegirDificultad(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
+    {
+        MostrarOpcionesDificultad();
+        int opcion = new ValidarOpciones().ValidarOpcion(3);
+        switch (opcion)
+        {
+            case 1:
+                elegido1.Caracteristicas.SubirEstadisticasJugador();
+                elegido2.Caracteristicas.SubirEstadisticasJugador();
+                break;
+            case 2:
+                oponente1.Caracteristicas.SubirNivelOponente();
+                oponente2.Caracteristicas.SubirNivelOponente();
+                break;
+            case 3:
+                for (int i = 0; i < 2; i++)
+                {
+                    oponente1.Caracteristicas.SubirNivelOponente();
+                    oponente2.Caracteristicas.SubirNivelOponente();
+                }
+                break;
         }
     }
 
