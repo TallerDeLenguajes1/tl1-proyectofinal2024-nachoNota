@@ -10,7 +10,6 @@ public class Juego
 	private ValidarOpciones validar;
     private HelperJson helperJson;
     private FuncionesTexto texto;
-    private Combate Combate;
 
 	public Juego()
 	{
@@ -18,7 +17,6 @@ public class Juego
 		validar = new ValidarOpciones();
         helperJson = new HelperJson();
         texto = new FuncionesTexto();
-        Combate = new Combate();
     }
 
 	public async Task EmpezarNuevoJuego()
@@ -81,11 +79,11 @@ public class Juego
 
         InstanciaCuartosTorneo(PersonajeElegido, ListaDePersonajes);
 
-        if (Combate.EsGanador(PersonajeElegido))
+        if (EsGanador(PersonajeElegido))
         {
           InstanciaSemifinalTorneo(PersonajeElegido, ListaDePersonajes);
 
-            if (Combate.EsGanador(PersonajeElegido))
+            if (EsGanador(PersonajeElegido))
             {
                 InstanciaFinalTorneo(PersonajeElegido, ListaDePersonajes);
             }
@@ -137,7 +135,8 @@ public class Juego
         texto.FraseIntroduccionCombate(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
         Console.Clear();
 
-        Combate.NuevoCombate(PrimerElegido, PrimerOponente, SegundoElegido, SegundoOponente);
+        var Combate = new Combate(PrimerElegido, PrimerOponente, SegundoElegido, SegundoOponente);
+        Combate.NuevoCombate();
 
         if (EsGanador(PrimerElegido, SegundoElegido))
         {
@@ -176,7 +175,8 @@ public class Juego
 
         Console.Clear();
 
-        Combate.NuevoCombate(PersonajeElegido, Oponente);
+        var Combate = new Combate(PersonajeElegido, Oponente);
+        Combate.NuevoCombate();
     }
 
     private void InstanciaSemifinalTorneo(Personaje PersonajeElegido, List<Personaje> ListaDePersonajes)
@@ -195,8 +195,9 @@ public class Juego
         Thread.Sleep(4000);
 
         Console.Clear();
-        
-        Combate.NuevoCombate(PersonajeElegido, Oponente);
+
+        var Combate = new Combate(PersonajeElegido, Oponente);
+        Combate.NuevoCombate();
     }
 
     private void InstanciaFinalTorneo(Personaje PersonajeElegido, List<Personaje> ListaDePersonajes)
@@ -218,14 +219,15 @@ public class Juego
 
         Console.Clear();
 
-        Combate.NuevoCombate(PersonajeElegido, Oponente);
+        var Combate = new Combate(PersonajeElegido, Oponente);
+        Combate.NuevoCombate();
 
         VerificarCampeonTorneo(PersonajeElegido, Oponente);
     }
 
     private void VerificarCampeonTorneo(Personaje PersonajeElegido, Personaje Oponente)
     {
-        if (Combate.EsGanador(PersonajeElegido))
+        if (EsGanador(PersonajeElegido))
         {
             texto.MensajeGanadorFinal(PersonajeElegido);
             GuardarCampeon("CampeonesHistoricos.json", PersonajeElegido);
