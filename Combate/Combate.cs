@@ -31,7 +31,7 @@ namespace VentanaCombate
         {
             this.elegido1 = elegido1;
             this.oponente1 = oponente1;
-           
+
             personajeActivo = elegido1;
             oponenteActivo = oponente1;
             movimientosPorClave = CrearClavesMovimientos();
@@ -154,6 +154,15 @@ namespace VentanaCombate
             }
             else
             {
+                /*
+                 Movimientos
+                    1- Ataque normal
+                    2- Carga abrasadora
+                    3- Proteccion divina +8
+                    4- Barrera magica +4
+                    5- Elixir de vida +25
+                    6- Pocion de curacion +15
+                 */
                 var rdm = new Random();
                 if (oponenteActivo.Caracteristicas.Salud >= 70)
                 {
@@ -438,9 +447,9 @@ namespace VentanaCombate
                 new Movimientos("Ataque normal", "Inflige daño a tu Oponente", "Ataque", 0, 0),
                 new Movimientos("Carga abrasadora", "Burla la defensa enemiga e inflinge todo el daño posible (-30 de Mana)", "Ataque", 0, 30),
                 new Movimientos("Protección Divina", "+8 de Defensa (-20 de Mana)", "Defensa", 8, 20),
-                new Movimientos("Pocion de curación", "+25 de Salud (-25 de Mana)", "Salud", 25, 25),
+                new Movimientos("Elixir de vida", "+25 de Salud (-25 de Mana)", "Salud", 25, 25),
                 new Movimientos("Barrera mágica", "+4 de Defensa (-10 de Mana)", "Defensa", 4, 10),
-                new Movimientos("Elixir de vida", "+15 de salud (-15 de Mana)", "Salud", 15, 15)
+                new Movimientos("Poción de curación", "+15 de salud (-15 de Mana)", "Salud", 15, 15)
             };
         }
     }

@@ -10,8 +10,7 @@ namespace MiProyecto.FabricaDePersonajes
     {
         public Personaje CrearPersonaje(Datos datos){
             var caracteristicas = new Caracteristicas();
-            var NuevoPersonaje = new Personaje(datos, caracteristicas);
-            return NuevoPersonaje;
+            return new Personaje(datos, caracteristicas);
         }
 
         public async Task<List<Personaje>> CrearListaPersonajes()
@@ -72,6 +71,7 @@ namespace MiProyecto.FabricaDePersonajes
         {
             var listaDatos = new List<Datos>();
             var helperJson = new HelperJson();   
+
             listaDatos.Add(new Datos("Daredevil", "When Matt Murdock saved a man from an oncoming truck, it spilled a radioactive cargo that rendered Matt blind while enhancing his remaining senses. Under the harsh tutelage of blind martial arts master Stick, Matt mastered his heightened senses and became a formidable fighter."));
             listaDatos.Add(new Datos("Iron Man", "Wounded, captured and forced to build a weapon by his enemies, billionaire industrialist Tony Stark instead created an advanced suit of armor to save his life and escape captivity. Now with a new outlook on life, Tony uses his money and intelligence to make the world a safer, better place as Iron Man."));
             listaDatos.Add(new Datos("Black Panther", "T'Challa, the Black Panther, is the king of Wakanda, a highly advanced African nation. He possesses enhanced abilities given to him by the heart-shaped herb and wears a vibranium suit that makes him a formidable warrior and protector of his people."));
@@ -96,7 +96,7 @@ namespace MiProyecto.FabricaDePersonajes
             {
                 HttpClient client = new HttpClient
                 {
-                    Timeout = TimeSpan.FromSeconds(5) //pongo 5 segundos de tiempo de espera
+                    Timeout = TimeSpan.FromSeconds(3) //pongo 3 segundos de tiempo de espera
                 };
 
                 string url = $"{baseUrl}characters?comics=32477&limit=13&offset=1&ts=1&apikey={publicKey}&hash={hash}";
