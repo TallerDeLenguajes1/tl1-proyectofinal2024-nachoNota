@@ -8,8 +8,23 @@ namespace CaracteristicasPersonaje
         private int agilidad;
         private int resistencia;
         private int fuerza;
+        private int salud;
 
-        public int Salud { get; set; }
+        public int Salud
+        {
+            get { return salud; }
+            set
+            {
+                if(value < 0)
+                {
+                    salud = 0;
+                }
+                else
+                {
+                    salud = value;
+                }
+            }
+        }
         public int Daño { get; set; }
         public int Defensa { get; set; }
         public int Mana { get; set; }

@@ -122,7 +122,7 @@ namespace MiProyecto.FabricaDePersonajes
             return Oponente;
         }
 
-        public Personaje PersonajeElegido(List<Personaje> listaPersonajes, int opcion)
+        public Personaje personajeElegido(List<Personaje> listaPersonajes, int opcion)
         {
             Personaje personaje = listaPersonajes[opcion - 1];
             listaPersonajes.Remove(personaje);

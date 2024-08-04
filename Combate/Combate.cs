@@ -86,7 +86,7 @@ namespace VentanaCombate
 
             Console.Clear();
 
-            if (opcionElegida == movimientosPorClave.Count)
+            if (opcionElegida == 7)
             {
                 personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
                 return true;
@@ -158,8 +158,8 @@ namespace VentanaCombate
                  Movimientos
                     1- Ataque normal
                     2- Carga abrasadora
-                    3- Proteccion divina +8
-                    4- Barrera magica +4
+                    3- Barrera magica +4
+                    4- Proteccion divina  +8
                     5- Elixir de vida +25
                     6- Pocion de curacion +15
                  */
@@ -177,7 +177,7 @@ namespace VentanaCombate
                                 BurlarDefensa(oponenteActivo, personajeActivo, movimientosPorClave[2]);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+8
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+8
                                 break;
                         }
                     }
@@ -208,7 +208,7 @@ namespace VentanaCombate
                                 BurlarDefensa(oponenteActivo, personajeActivo, movimientosPorClave[2]);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+8
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+8
                                 break;
                         }
                     }
@@ -261,7 +261,7 @@ namespace VentanaCombate
                                 AumentarSalud(oponenteActivo, movimientosPorClave[6]); //+15
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+4
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+4
                                 break;
                         }
                     }
@@ -367,10 +367,7 @@ namespace VentanaCombate
             int dañoRealizado = atacante.Caracteristicas.Daño;
             defensor.Caracteristicas.Salud -= dañoRealizado;
             atacante.Caracteristicas.Mana -= movimiento.CostoMana;
-            if (atacante.Caracteristicas.Mana < 0)
-            {
-                atacante.Caracteristicas.Mana = 0;
-            }
+
             Console.WriteLine($"\t\t\nBurlaste la defensa enemiga e hiciste {dañoRealizado} de daño!");
         }
 
@@ -378,10 +375,7 @@ namespace VentanaCombate
         {
             atacante.Caracteristicas.Salud += movimiento.CantidadAumento;
             atacante.Caracteristicas.Mana -= movimiento.CostoMana;
-            if (atacante.Caracteristicas.Mana < 0)
-            {
-                atacante.Caracteristicas.Mana = 0;
-            }
+
             Console.WriteLine($"\t\t\nBien! Aumentaste +{movimiento.CantidadAumento} tu salud, ahora tienes {atacante.Caracteristicas.Salud}");
         }
 
@@ -389,10 +383,7 @@ namespace VentanaCombate
         {
             atacante.Caracteristicas.Defensa += movimiento.CantidadAumento;
             atacante.Caracteristicas.Mana -= movimiento.CostoMana;
-            if (atacante.Caracteristicas.Mana < 0)
-            {
-                atacante.Caracteristicas.Mana = 0;
-            }
+
             Console.WriteLine($"\t\t\nBien jugado! Aumentaste +{movimiento.CantidadAumento}, ahora tu defensa es de {atacante.Caracteristicas.Defensa}");
         }
 
@@ -407,16 +398,14 @@ namespace VentanaCombate
 
         private void MostrarMovimientos()
         {
-            int i = 1;
-            var categorias = movimientosPorClave.Values.GroupBy(m => m.Categoria); //Agrupo los movimientos segun sus categorias
+            var categorias = movimientosPorClave.GroupBy(kvp => kvp.Value.Categoria); //Agrupo los movimientos segun sus categorias
 
             foreach (var categoria in categorias)
             {
                 Console.WriteLine($"\t──── {categoria.Key.ToUpper()} ────"); //Obtengo la clave del grupo (categoria)
-                foreach (var movimiento in categoria)
+                foreach (var kvp in categoria)
                 {
-                    Console.WriteLine($"\t{i}- '{movimiento.Nombre}' | {movimiento.Descripcion}");
-                    i++;
+                    Console.WriteLine($"\t{kvp.Key}- '{kvp.Value.Nombre}' | {kvp.Value.Descripcion}");
                 }
                 Console.WriteLine();
             }
@@ -426,9 +415,15 @@ namespace VentanaCombate
         {
             var listaMovimientos = CrearListaMovimientos();
             var movimientosPorClave = new Dictionary<int, Movimientos>();
-            var categorias = listaMovimientos.GroupBy(m => m.Categoria);
             int i = 1;
+            
+            foreach(var movimiento in listaMovimientos.OrderBy(m => m.Categoria).ThenBy(m => m.Nombre))
+            {
+                movimientosPorClave.Add(i, movimiento);
+                i++;
+            }
 
+            /*var categorias = listaMovimientos.GroupBy(m => m.Categoria);
             foreach (var categoria in categorias)
             {
                 foreach (var movimiento in categoria)
@@ -436,7 +431,7 @@ namespace VentanaCombate
                     movimientosPorClave.Add(i, movimiento);
                     i++;
                 }
-            }
+            }*/
             return movimientosPorClave;
         }
 
