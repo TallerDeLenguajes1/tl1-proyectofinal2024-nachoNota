@@ -62,15 +62,10 @@ public class Juego
 	}
 
     //TORNEO
-	private void NuevoTorneo(List<Personaje> ListaDePersonajes) 
+    private void NuevoTorneo(List<Personaje> ListaDePersonajes) 
 	{
-        texto.MostrarPersonajes(ListaDePersonajes);
-        Console.Write("Con qué personaje quiere pelear? (ingresar su numero): ");
-        int opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
+        Personaje personajeElegido = ElegirPersonaje(listaDePersonajes, "Con qué personaje quiere pelear? Ingrese su opción: ");
 
-        Console.Clear();
-
-        Personaje PersonajeElegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
         Console.WriteLine($"\nMUY BIEN! El personaje elegido es: \n\n");
         texto.MostrarPersonaje(PersonajeElegido);
         Thread.Sleep(4000);
@@ -99,60 +94,48 @@ public class Juego
     }
 
     //COMBATE 2V2
-    private void NuevoCombate2v2(List<Personaje> ListaDePersonajes)
+    private void NuevoCombate2v2(List<Personaje> listaDePersonajes)
     {
-        texto.MostrarPersonajes(ListaDePersonajes);
-        Console.Write("Quién será tu primer peleador? (ingresar su numero): ");
-        int opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
-        Personaje PrimerElegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+        Personaje primerElegido = ElegirPersonaje(listaDePersonajes, "Quién será tu primer peleador? Ingrese su opción: ");
 
         Console.Clear();
+        
         Thread.Sleep(1000);
-
-        texto.MostrarPersonajes(ListaDePersonajes);
-        Console.Write("Pongamosle un compañero a tu peleador, quien será?: ");
-        opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
-        Personaje SegundoElegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+        Personaje segundoElegido = ElegirPersonaje(listaDePersonajes, "Pongamosle un compañero a tu peleador, quién será?: ");
 
         Console.Clear();
 
-        Personaje PrimerOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
-        Personaje SegundoOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
+        Personaje primerOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
+        Personaje segundoOponente = fabrica.PersonajeAleatorio(ListaDePersonajes);
 
-        ElegirDificultad(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+        ElegirDificultad(primerElegido, segundoElegido, primerOponente, segundoOponente);
 
         Console.Clear();
 
         Console.WriteLine("Muy bien!! Tus oponentes en este caso serán: ");
         Thread.Sleep(2000);
-
-        texto.MostrarPersonaje(PrimerOponente);
-        texto.MostrarPersonaje(SegundoOponente);
+        texto.MostrarPersonaje(primerOponente);
+        texto.MostrarPersonaje(segundoOponente);
+        
         Thread.Sleep(6000);
 
         Console.Clear();
 
-        texto.FraseIntroduccionCombate(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
+        texto.FraseIntroduccionCombate(primerElegido, segundoElegido, primerOponente, segundoOponente);
+
         Console.Clear();
 
-        var Combate = new Combate(PrimerElegido, PrimerOponente, SegundoElegido, SegundoOponente);
+        var Combate = new Combate(primerElegido, primerOponente, segundoElegido, segundoOponente);
         Combate.NuevoCombate();
 
-        if (EsGanador(PrimerElegido, SegundoElegido))
-        {
-            texto.AnunciarGanador(PrimerElegido, SegundoElegido, PrimerOponente, SegundoOponente);
-        }
-        else
-        {
-            texto.AnunciarGanador(PrimerOponente, SegundoOponente, PrimerElegido, SegundoElegido);
-        }
+        VerificarGanador2v2(primerElegido, segundoElegido, primerOponente, segundoOponente);
     }
 
     //MOSTRAR CAMPEONES
     private void MostrarListaCampeones()
     {
-        string NombreArchivo = "CampeonesHistoricos.json";
-        string rutaCompleta = Path.GetFullPath(NombreArchivo);
+        string nombreArchivo = "CampeonesHistoricos.json";
+        string rutaCompleta = Path.GetFullPath(nombreArchivo);
 
         if (!File.Exists(rutaCompleta))
         {
@@ -160,8 +143,18 @@ public class Juego
         }
         else
         {
-            texto.MostrarCampeones(NombreArchivo);
+            texto.MostrarCampeones(nombreArchivo);
         }
+    }
+
+    private Personaje ElegirPersonaje(List<Personaje> listaDePersonajes, string mensaje)
+    {
+        texto.MostrarPersonajes(ListaDePersonajes);
+        Console.Write(mensaje);
+        int opcionPersonaje = validar.ValidarOpcion(ListaDePersonajes.Count);
+
+        Personaje elegido = fabrica.PersonajeElegido(ListaDePersonajes, opcionPersonaje);
+        return elegido;
     }
 
     private void InstanciaCuartosTorneo(Personaje PersonajeElegido, List<Personaje> ListaDePersonajes)
@@ -239,6 +232,18 @@ public class Juego
         }
     }
 
+    private void VerificarGanador2v2(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
+    {
+        if (EsGanador(elegido1, segundoElegido))
+        {
+            texto.AnunciarGanador(elegido1, elegido2, oponente1, oponente2);
+        }
+        else
+        {
+            texto.AnunciarGanador(oponente1, oponente2, elegido1, elegido2);
+        }
+    }
+
     private void ElegirDificultad(Personaje elegido1, Personaje elegido2, Personaje oponente1, Personaje oponente2)
     {
         MostrarOpcionesDificultad();
@@ -287,26 +292,16 @@ public class Juego
     private void GuardarCampeon(string nombreArchivo, Personaje campeon)
     {
         var listaCampeones = new List<Personaje>();
-
         campeon.Datos.FechaCampeon = DateTime.Now;
 
-        if (!File.Exists(nombreArchivo))
-        {
-            listaCampeones.Add(campeon);
-            string stringJson = JsonSerializer.Serialize(listaCampeones);
-            helperJson.GuardarArchivo(nombreArchivo, stringJson);
-        }
-        else
+        if (File.Exists(nombreArchivo))
         {
             string recuperadoJson = helperJson.AbrirArchivo(nombreArchivo);
-
-            var listaRecuperada = JsonSerializer.Deserialize<List<Personaje>>(recuperadoJson);
-
-            listaRecuperada.Add(campeon);
-
-            string stringJsonNuevo = JsonSerializer.Serialize(listaRecuperada);
-
-            helperJson.GuardarArchivo(nombreArchivo, stringJsonNuevo);
+            listaCampeones = JsonSerializer.Deserialize<List<Personaje>>(recuperadoJson);            
         }
+     
+        listaCampeones.Add(campeon);
+        string stringJson = JsonSerializer.Serialize(listaCampeones);
+        helperJson.GuardarArchivo(nombreArchivo, stringJson);
     }
 }
