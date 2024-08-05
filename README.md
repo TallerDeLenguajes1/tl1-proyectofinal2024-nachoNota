@@ -7,7 +7,8 @@ https://developer.marvel.com/docs
 Las mecánicas de juego son simples. Ingresas a nuestro juego y debes elegir una de las opciones para comenzar a batallar con el personaje que quieras. Tenemos dos opciones para batallar:  
 - TORNEO: En esta modalidad ingresarás con el personaje de tu elección y deberás abrir tu camino a la final midiendote con distintos personajes, cada uno con su propio nivel, que irá aumentando progresivamente a medida que avances.
 - COMBATE 2V2: Por otra parte, puedes llevar a cabo un combate por equipos entre 4 personajes (2 equipos), en el que puedes elegir 2 heroes o villanos de tu preferencia para unir fuerzas. Puedes además elegir la dificultad del combate, dependiendo tu nivel de juego. Ya dentro del combate, puedes intercambiar con tu compañero en cualquier momento de la batalla.    
-- CAMPEONES HISTORICOS: Al ingresar a esta opción, puedes consultar sobre los campeones que ganaron el gran torneo en toda su historia, pudiendo además ver la fecha y hora exactas en las que se consagraron victoriosos.
+
+CAMPEONES HISTORICOS: Al ingresar a esta opción, puedes consultar sobre los campeones que ganaron el gran torneo en toda su historia, pudiendo además ver la fecha y hora exactas en las que se consagraron victoriosos.
 
 Ya dentro de la batalla, tienes distintos movimientos para elegir dependiendo de la cantidad de maná disponible que tengas. Puedes elegir entre ir al frente y atacar, curarte en el caso de que tengas poca vida, o aumentar tu defensa para que tu oponente haga menos daño al atacarte.
 
@@ -15,11 +16,11 @@ Ya dentro de la batalla, tienes distintos movimientos para elegir dependiendo de
 Este proyecto presenta dos carpetas y distintas clases para asegurar el correcto funcionamiento de este proyecto.  
 
 ###  Combate  
-- *Combate.cs*: Esta clase presenenta los distintos métodos para que el combate entre los personajes funcione, como la lógica del daño que se realiza al atacar, o cómo está estructurada la inteligencia del oponente para saber qué movimiento realizar, etc.
+- *Combate.cs*: Esta clase presenta los distintos métodos para que el combate entre los personajes funcione, como la lógica del daño que se realiza al atacar, o cómo está estructurada la inteligencia del oponente para saber qué movimiento realizar, etc.
 - *Movimientos.cs*: Una clase para inicializar los movimientos, en los que cada uno presenta su propio nombre, descripcion, costo de maná, y una categoría asignada según la función del movimiento.   
 
 ### Personaje  
-- *Datos.cs*: Son los datos del personaje en particular, los cuales incluyen su nombre, una corta descripción del mismo 	
+- *Datos.cs*: Son los datos del personaje en particular, los cuales incluyen su nombre, una corta descripción del mismo y la fecha en la que salieron campeones del torneo (si es que lo hicieron). 	
 - *Caracteristicas.cs*: Contiene todo lo relacionado a la cantidad de daño y defensa que vaya a tener un personaje en particular.
 - *FabricaDePersonajes.cs*: En esta parte se encuentran los metodos para crear distintos personajes dependiendo de si se pudo o no realizar la conexion a la API.
 

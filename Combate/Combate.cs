@@ -1,4 +1,3 @@
-using System.Text.Json;
 using MovimientosCombate;
 using MiProyecto.FabricaDePersonajes;
 
@@ -190,7 +189,7 @@ namespace VentanaCombate
                                 RestarSalud(oponenteActivo, personajeActivo);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+4
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+4
                                 break;
                         }
                     }
@@ -221,7 +220,7 @@ namespace VentanaCombate
                                 RestarSalud(oponenteActivo, personajeActivo);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+4
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+4
                                 break;
                         }
                     }
@@ -423,15 +422,6 @@ namespace VentanaCombate
                 i++;
             }
 
-            /*var categorias = listaMovimientos.GroupBy(m => m.Categoria);
-            foreach (var categoria in categorias)
-            {
-                foreach (var movimiento in categoria)
-                {
-                    movimientosPorClave.Add(i, movimiento);
-                    i++;
-                }
-            }*/
             return movimientosPorClave;
         }
 

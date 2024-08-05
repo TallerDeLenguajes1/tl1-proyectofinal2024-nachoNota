@@ -50,7 +50,6 @@ public class Juego
 			} else
 			{
                 Console.WriteLine("Esperamos que vuelvas a jugar pronto, suerte!");
-                Thread.Sleep(3000);
             }
 
             Thread.Sleep(1000);

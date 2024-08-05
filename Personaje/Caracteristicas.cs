@@ -45,12 +45,12 @@ namespace CaracteristicasPersonaje
             Daño = CalcularDaño(); 
         }
 
-        public int GenerarAleatorio(int min, int max)
+        private int GenerarAleatorio(int min, int max)
         {
             return new Random().Next(min, max);
         }
 
-        public int CalcularDaño()
+        private int CalcularDaño()
         {
             int dañoBase = 10;
             double multiplicadorFuerza = 0.35;
@@ -61,7 +61,7 @@ namespace CaracteristicasPersonaje
             return (int)(dañoBase + (fuerza * multiplicadorFuerza) + (agilidad * multiplicadorAgilidad) + (Precision * multiplicadorPrecision) + componenteAleatorio);
         }
 
-        public int CalcularDefensa()
+        private int CalcularDefensa()
         {
             int defensaBase = 12;
             double multiplicadorAgilidad = 0.4;
