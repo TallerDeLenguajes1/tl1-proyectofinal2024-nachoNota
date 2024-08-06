@@ -8,10 +8,9 @@ namespace MiProyecto.FabricaDePersonajes
 {
     public class FabricaDePersonajes
     {
-        public Personaje CrearPersonaje(Datos datos){
+        private Personaje CrearPersonaje(Datos datos){
             var caracteristicas = new Caracteristicas();
-            var NuevoPersonaje = new Personaje(datos, caracteristicas);
-            return NuevoPersonaje;
+            return new Personaje(datos, caracteristicas);
         }
 
         public async Task<List<Personaje>> CrearListaPersonajes()
@@ -28,22 +27,22 @@ namespace MiProyecto.FabricaDePersonajes
             }
         }
 
-        public List<Personaje> ListaCreadaApi(Raiz raiz)
+        private List<Personaje> ListaCreadaApi(Raiz raiz)
         {
             var listaPersonajes = new List<Personaje>();
-            foreach (var Personaje in raiz.data.Resultados)
+            foreach (var personaje in raiz.data.Resultados)
             {
-                if (Personaje.Descripcion != string.Empty)
+                if (personaje.Descripcion != string.Empty)
                 {
-                    var PersonajeCreado = CrearPersonaje(new Datos(Personaje.Nombre, Personaje.Descripcion));
-                    PersonajeCreado.Caracteristicas.BalancearEstadisticas();
-                    listaPersonajes.Add(PersonajeCreado);
+                    var personajeCreado = CrearPersonaje(new Datos(personaje.Nombre, personaje.Descripcion));
+                    personajeCreado.Caracteristicas.BalancearEstadisticas();
+                    listaPersonajes.Add(personajeCreado);
                 }
             }
             return listaPersonajes;
         }
 
-        public List<Personaje> ListaCreadaSinApi()
+        private List<Personaje> ListaCreadaSinApi()
         {
             var listaPersonajes = new List<Personaje>();
             var helperJson = new HelperJson();
@@ -68,10 +67,11 @@ namespace MiProyecto.FabricaDePersonajes
             return listaPersonajes;
         }
 
-        public void CrearArchivoDatosPersonajes(string nombreArchivo)
+        private void CrearArchivoDatosPersonajes(string nombreArchivo)
         {
             var listaDatos = new List<Datos>();
             var helperJson = new HelperJson();   
+
             listaDatos.Add(new Datos("Daredevil", "When Matt Murdock saved a man from an oncoming truck, it spilled a radioactive cargo that rendered Matt blind while enhancing his remaining senses. Under the harsh tutelage of blind martial arts master Stick, Matt mastered his heightened senses and became a formidable fighter."));
             listaDatos.Add(new Datos("Iron Man", "Wounded, captured and forced to build a weapon by his enemies, billionaire industrialist Tony Stark instead created an advanced suit of armor to save his life and escape captivity. Now with a new outlook on life, Tony uses his money and intelligence to make the world a safer, better place as Iron Man."));
             listaDatos.Add(new Datos("Black Panther", "T'Challa, the Black Panther, is the king of Wakanda, a highly advanced African nation. He possesses enhanced abilities given to him by the heart-shaped herb and wears a vibranium suit that makes him a formidable warrior and protector of his people."));
@@ -86,7 +86,7 @@ namespace MiProyecto.FabricaDePersonajes
             helperJson.GuardarArchivo(nombreArchivo, stringJson);
         }
 
-        public static async Task<Raiz> ObtenerDatosApi()
+        private static async Task<Raiz> ObtenerDatosApi()
         {
             string publicKey = "650b489211f65652098aedd5afbb79bf";
             string hash = "abde502c3b8786278606247295cf4767";
@@ -96,7 +96,7 @@ namespace MiProyecto.FabricaDePersonajes
             {
                 HttpClient client = new HttpClient
                 {
-                    Timeout = TimeSpan.FromSeconds(5) //pongo 5 segundos de tiempo de espera
+                    Timeout = TimeSpan.FromSeconds(3) //pongo 3 segundos de tiempo de espera
                 };
 
                 string url = $"{baseUrl}characters?comics=32477&limit=13&offset=1&ts=1&apikey={publicKey}&hash={hash}";
@@ -122,7 +122,7 @@ namespace MiProyecto.FabricaDePersonajes
             return Oponente;
         }
 
-        public Personaje PersonajeElegido(List<Personaje> listaPersonajes, int opcion)
+        public Personaje personajeElegido(List<Personaje> listaPersonajes, int opcion)
         {
             Personaje personaje = listaPersonajes[opcion - 1];
             listaPersonajes.Remove(personaje);

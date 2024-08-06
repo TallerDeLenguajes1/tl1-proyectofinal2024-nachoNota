@@ -416,12 +416,14 @@ namespace VentanaCombate
             var movimientosPorClave = new Dictionary<int, Movimientos>();
             int i = 1;
 
-            foreach (var movimiento in listaMovimientos.OrderBy(m => m.Categoria))
+            foreach (var categoria in categorias)
             {
-                movimientosPorClave.Add(i, movimiento);
-                i++;
+                foreach (var movimiento in categoria)
+                {
+                    movimientosPorClave.Add(i, movimiento);
+                    i++;
+                }
             }
-
             return movimientosPorClave;
         }
 

@@ -8,8 +8,23 @@ namespace CaracteristicasPersonaje
         private int agilidad;
         private int resistencia;
         private int fuerza;
+        private int salud;
 
-        public int Salud { get; set; }
+        public int Salud
+        {
+            get { return salud; }
+            set
+            {
+                if(value < 0)
+                {
+                    salud = 0;
+                }
+                else
+                {
+                    salud = value;
+                }
+            }
+        }
         public int Daño { get; set; }
         public int Defensa { get; set; }
         public int Mana { get; set; }
@@ -30,12 +45,12 @@ namespace CaracteristicasPersonaje
             Daño = CalcularDaño(); 
         }
 
-        public int GenerarAleatorio(int min, int max)
+        private int GenerarAleatorio(int min, int max)
         {
             return new Random().Next(min, max);
         }
 
-        public int CalcularDaño()
+        private int CalcularDaño()
         {
             int dañoBase = 10;
             double multiplicadorFuerza = 0.35;
@@ -46,7 +61,7 @@ namespace CaracteristicasPersonaje
             return (int)(dañoBase + (fuerza * multiplicadorFuerza) + (agilidad * multiplicadorAgilidad) + (Precision * multiplicadorPrecision) + componenteAleatorio);
         }
 
-        public int CalcularDefensa()
+        private int CalcularDefensa()
         {
             int defensaBase = 12;
             double multiplicadorAgilidad = 0.4;
@@ -77,7 +92,7 @@ namespace CaracteristicasPersonaje
             Salud += 10;
             Mana += 5;
 
-            agilidad += GenerarAleatorio(4, 7);
+            agilidad += GenerarAleatorio(2, 5);
             fuerza += GenerarAleatorio(2, 5);
             Precision += GenerarAleatorio(2, 5);
             
@@ -92,21 +107,6 @@ namespace CaracteristicasPersonaje
 
             Mana = valorBase;
             Precision += 5;
-        }
-
-        public void SubirNivel()
-        {
-            Nivel++;
-
-            Salud += 10;
-            Mana += 5;
-            agilidad += GenerarAleatorio(2, 5);
-            fuerza += GenerarAleatorio(2, 5);
-            Precision += GenerarAleatorio(2, 5);
-            resistencia += GenerarAleatorio(2, 5);
-
-            Daño = CalcularDaño();
-            Defensa = CalcularDefensa();
         }
     }
 }
