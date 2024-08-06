@@ -8,7 +8,7 @@ namespace MiProyecto.FabricaDePersonajes
 {
     public class FabricaDePersonajes
     {
-        public Personaje CrearPersonaje(Datos datos){
+        private Personaje CrearPersonaje(Datos datos){
             var caracteristicas = new Caracteristicas();
             return new Personaje(datos, caracteristicas);
         }
@@ -27,22 +27,22 @@ namespace MiProyecto.FabricaDePersonajes
             }
         }
 
-        public List<Personaje> ListaCreadaApi(Raiz raiz)
+        private List<Personaje> ListaCreadaApi(Raiz raiz)
         {
             var listaPersonajes = new List<Personaje>();
-            foreach (var Personaje in raiz.data.Resultados)
+            foreach (var personaje in raiz.data.Resultados)
             {
-                if (Personaje.Descripcion != string.Empty)
+                if (personaje.Descripcion != string.Empty)
                 {
-                    var PersonajeCreado = CrearPersonaje(new Datos(Personaje.Nombre, Personaje.Descripcion));
-                    PersonajeCreado.Caracteristicas.BalancearEstadisticas();
-                    listaPersonajes.Add(PersonajeCreado);
+                    var personajeCreado = CrearPersonaje(new Datos(personaje.Nombre, personaje.Descripcion));
+                    personajeCreado.Caracteristicas.BalancearEstadisticas();
+                    listaPersonajes.Add(personajeCreado);
                 }
             }
             return listaPersonajes;
         }
 
-        public List<Personaje> ListaCreadaSinApi()
+        private List<Personaje> ListaCreadaSinApi()
         {
             var listaPersonajes = new List<Personaje>();
             var helperJson = new HelperJson();
@@ -67,7 +67,7 @@ namespace MiProyecto.FabricaDePersonajes
             return listaPersonajes;
         }
 
-        public void CrearArchivoDatosPersonajes(string nombreArchivo)
+        private void CrearArchivoDatosPersonajes(string nombreArchivo)
         {
             var listaDatos = new List<Datos>();
             var helperJson = new HelperJson();   
@@ -86,7 +86,7 @@ namespace MiProyecto.FabricaDePersonajes
             helperJson.GuardarArchivo(nombreArchivo, stringJson);
         }
 
-        public static async Task<Raiz> ObtenerDatosApi()
+        private static async Task<Raiz> ObtenerDatosApi()
         {
             string publicKey = "650b489211f65652098aedd5afbb79bf";
             string hash = "abde502c3b8786278606247295cf4767";

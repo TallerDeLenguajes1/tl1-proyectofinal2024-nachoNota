@@ -92,7 +92,7 @@ namespace CaracteristicasPersonaje
             Salud += 10;
             Mana += 5;
 
-            agilidad += GenerarAleatorio(4, 7);
+            agilidad += GenerarAleatorio(2, 5);
             fuerza += GenerarAleatorio(2, 5);
             Precision += GenerarAleatorio(2, 5);
             

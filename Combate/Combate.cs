@@ -85,7 +85,7 @@ namespace VentanaCombate
 
             Console.Clear();
 
-            if (opcionElegida == 7)
+            if (movimientoElegido.Categoria.ToUpper() == "CAMBIO")
             {
                 personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
                 return true;
@@ -157,8 +157,8 @@ namespace VentanaCombate
                  Movimientos
                     1- Ataque normal
                     2- Carga abrasadora
-                    3- Barrera magica +4
-                    4- Proteccion divina  +8
+                    3- Proteccion divina  +8
+                    4- Barrera magica +4
                     5- Elixir de vida +25
                     6- Pocion de curacion +15
                  */
@@ -176,7 +176,7 @@ namespace VentanaCombate
                                 BurlarDefensa(oponenteActivo, personajeActivo, movimientosPorClave[2]);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+8
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+8
                                 break;
                         }
                     }
@@ -189,7 +189,7 @@ namespace VentanaCombate
                                 RestarSalud(oponenteActivo, personajeActivo);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+4
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -207,7 +207,7 @@ namespace VentanaCombate
                                 BurlarDefensa(oponenteActivo, personajeActivo, movimientosPorClave[2]);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+8
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+8
                                 break;
                         }
                     }
@@ -220,7 +220,7 @@ namespace VentanaCombate
                                 RestarSalud(oponenteActivo, personajeActivo);
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+4
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -260,7 +260,7 @@ namespace VentanaCombate
                                 AumentarSalud(oponenteActivo, movimientosPorClave[6]); //+15
                                 break;
                             case 2:
-                                AumentarDefensa(oponenteActivo, movimientosPorClave[3]); //+4
+                                AumentarDefensa(oponenteActivo, movimientosPorClave[4]); //+4
                                 break;
                         }
                     }
@@ -416,7 +416,7 @@ namespace VentanaCombate
             var movimientosPorClave = new Dictionary<int, Movimientos>();
             int i = 1;
             
-            foreach(var movimiento in listaMovimientos.OrderBy(m => m.Categoria).ThenBy(m => m.Nombre))
+            foreach(var movimiento in listaMovimientos.OrderBy(m => m.Categoria))
             {
                 movimientosPorClave.Add(i, movimiento);
                 i++;

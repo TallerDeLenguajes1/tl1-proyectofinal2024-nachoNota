@@ -163,13 +163,13 @@ public class Juego
         Console.WriteLine("En cuartos de final tendras que enfrentarte a...\n");
         Thread.Sleep(2000);
 
-        Personaje Oponente = fabrica.PersonajeAleatorio(listaDePersonajes);
-        texto.MostrarPersonaje(Oponente);
+        Personaje oponente = fabrica.PersonajeAleatorio(listaDePersonajes);
+        texto.MostrarPersonaje(oponente);
         Thread.Sleep(4000);
 
         Console.Clear();
 
-        var Combate = new Combate(personajeElegido, Oponente);
+        var Combate = new Combate(personajeElegido, oponente);
         Combate.NuevoCombate();
     }
 
@@ -182,15 +182,15 @@ public class Juego
         Console.WriteLine("Para estas instancias, tu rival será...\n");
         Thread.Sleep(2000);
 
-        Personaje Oponente = fabrica.PersonajeAleatorio(listaDePersonajes);
-        Oponente.Caracteristicas.SubirNivelOponente();
+        Personaje oponente = fabrica.PersonajeAleatorio(listaDePersonajes);
+        oponente.Caracteristicas.SubirNivelOponente();
 
-        texto.MostrarPersonaje(Oponente);
+        texto.MostrarPersonaje(oponente);
         Thread.Sleep(4000);
 
         Console.Clear();
 
-        var Combate = new Combate(personajeElegido, Oponente);
+        var Combate = new Combate(personajeElegido, oponente);
         Combate.NuevoCombate();
     }
 
@@ -203,23 +203,23 @@ public class Juego
         Console.WriteLine("Para estas instancias, tu rival será...\n");
         Thread.Sleep(2000);
 
-        Personaje Oponente = fabrica.PersonajeAleatorio(listaDePersonajes);
+        Personaje oponente = fabrica.PersonajeAleatorio(listaDePersonajes);
         for (int i = 0; i < 2; i++)
         {
-            Oponente.Caracteristicas.SubirNivelOponente();
+            oponente.Caracteristicas.SubirNivelOponente();
         }
-        texto.MostrarPersonaje(Oponente);
+        texto.MostrarPersonaje(oponente);
         Thread.Sleep(4000);
 
         Console.Clear();
 
-        var Combate = new Combate(personajeElegido, Oponente);
+        var Combate = new Combate(personajeElegido, oponente);
         Combate.NuevoCombate();
 
-        VerificarCampeonTorneo(personajeElegido, Oponente);
+        VerificarCampeonTorneo(personajeElegido, oponente);
     }
 
-    private void VerificarCampeonTorneo(Personaje personajeElegido, Personaje Oponente)
+    private void VerificarCampeonTorneo(Personaje personajeElegido, Personaje oponente)
     {
         if (EsGanador(personajeElegido))
         {
@@ -229,7 +229,7 @@ public class Juego
         else
         {
             texto.MensajePerdedorFinal();
-            GuardarCampeon("CampeonesHistoricos.json", Oponente);
+            GuardarCampeon("CampeonesHistoricos.json", oponente);
         }
     }
 
