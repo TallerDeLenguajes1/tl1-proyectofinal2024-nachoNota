@@ -52,16 +52,17 @@ public class ValidarOpciones
     {
         bool opcionValida = false;
         int opcion = 0;
-        
+
         while (!opcionValida)
         {
             Console.Write("Opcion: ");
             string input = Console.ReadLine();
 
-            if(int.TryParse(input, out opcion) && movimientosClaves.ContainsKey(opcion))
+            if (int.TryParse(input, out opcion) && movimientosClaves.ContainsKey(opcion))
             {
                 opcionValida = true;
-            } else
+            }
+            else
             {
                 Console.WriteLine($"Por favor, ingrese un número válido entre 1 y {movimientosClaves.Count}");
             }

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using MovimientosCombate;
 using MiProyecto.FabricaDePersonajes;
 
@@ -31,7 +30,7 @@ namespace VentanaCombate
         {
             this.elegido1 = elegido1;
             this.oponente1 = oponente1;
-           
+
             personajeActivo = elegido1;
             oponenteActivo = oponente1;
             movimientosPorClave = CrearClavesMovimientos();
@@ -86,7 +85,7 @@ namespace VentanaCombate
 
             Console.Clear();
 
-            if (opcionElegida == movimientosPorClave.Count)
+            if (movimientoElegido.Categoria.ToUpper() == "CAMBIO")
             {
                 personajeActivo = IntercambiarPersonaje(personajeActivo, personajeActivo == elegido1 ? elegido2 : elegido1);
                 return true;
@@ -154,6 +153,15 @@ namespace VentanaCombate
             }
             else
             {
+                /*
+                 Movimientos
+                    1- Ataque normal
+                    2- Carga abrasadora
+                    3- Proteccion divina  +8
+                    4- Barrera magica +4
+                    5- Elixir de vida +25
+                    6- Pocion de curacion +15
+                 */
                 var rdm = new Random();
                 if (oponenteActivo.Caracteristicas.Salud >= 70)
                 {
@@ -358,10 +366,7 @@ namespace VentanaCombate
             int dañoRealizado = atacante.Caracteristicas.Daño;
             defensor.Caracteristicas.Salud -= dañoRealizado;
             atacante.Caracteristicas.Mana -= movimiento.CostoMana;
-            if (atacante.Caracteristicas.Mana < 0)
-            {
-                atacante.Caracteristicas.Mana = 0;
-            }
+
             Console.WriteLine($"\t\t\nBurlaste la defensa enemiga e hiciste {dañoRealizado} de daño!");
         }
 
@@ -369,10 +374,7 @@ namespace VentanaCombate
         {
             atacante.Caracteristicas.Salud += movimiento.CantidadAumento;
             atacante.Caracteristicas.Mana -= movimiento.CostoMana;
-            if (atacante.Caracteristicas.Mana < 0)
-            {
-                atacante.Caracteristicas.Mana = 0;
-            }
+
             Console.WriteLine($"\t\t\nBien! Aumentaste +{movimiento.CantidadAumento} tu salud, ahora tienes {atacante.Caracteristicas.Salud}");
         }
 
@@ -380,10 +382,7 @@ namespace VentanaCombate
         {
             atacante.Caracteristicas.Defensa += movimiento.CantidadAumento;
             atacante.Caracteristicas.Mana -= movimiento.CostoMana;
-            if (atacante.Caracteristicas.Mana < 0)
-            {
-                atacante.Caracteristicas.Mana = 0;
-            }
+
             Console.WriteLine($"\t\t\nBien jugado! Aumentaste +{movimiento.CantidadAumento}, ahora tu defensa es de {atacante.Caracteristicas.Defensa}");
         }
 
@@ -398,16 +397,14 @@ namespace VentanaCombate
 
         private void MostrarMovimientos()
         {
-            int i = 1;
-            var categorias = movimientosPorClave.Values.GroupBy(m => m.Categoria); //Agrupo los movimientos segun sus categorias
+            var categorias = movimientosPorClave.GroupBy(kvp => kvp.Value.Categoria); //Agrupo los movimientos segun sus categorias
 
             foreach (var categoria in categorias)
             {
                 Console.WriteLine($"\t──── {categoria.Key.ToUpper()} ────"); //Obtengo la clave del grupo (categoria)
-                foreach (var movimiento in categoria)
+                foreach (var kvp in categoria)
                 {
-                    Console.WriteLine($"\t{i}- '{movimiento.Nombre}' | {movimiento.Descripcion}");
-                    i++;
+                    Console.WriteLine($"\t{kvp.Key}- '{kvp.Value.Nombre}' | {kvp.Value.Descripcion}");
                 }
                 Console.WriteLine();
             }
@@ -417,17 +414,14 @@ namespace VentanaCombate
         {
             var listaMovimientos = CrearListaMovimientos();
             var movimientosPorClave = new Dictionary<int, Movimientos>();
-            var categorias = listaMovimientos.GroupBy(m => m.Categoria);
             int i = 1;
 
-            foreach (var categoria in categorias)
+            foreach (var movimiento in listaMovimientos.OrderBy(m => m.Categoria))
             {
-                foreach (var movimiento in categoria)
-                {
-                    movimientosPorClave.Add(i, movimiento);
-                    i++;
-                }
+                movimientosPorClave.Add(i, movimiento);
+                i++;
             }
+
             return movimientosPorClave;
         }
 
@@ -438,9 +432,9 @@ namespace VentanaCombate
                 new Movimientos("Ataque normal", "Inflige daño a tu Oponente", "Ataque", 0, 0),
                 new Movimientos("Carga abrasadora", "Burla la defensa enemiga e inflinge todo el daño posible (-30 de Mana)", "Ataque", 0, 30),
                 new Movimientos("Protección Divina", "+8 de Defensa (-20 de Mana)", "Defensa", 8, 20),
-                new Movimientos("Pocion de curación", "+25 de Salud (-25 de Mana)", "Salud", 25, 25),
+                new Movimientos("Elixir de vida", "+25 de Salud (-25 de Mana)", "Salud", 25, 25),
                 new Movimientos("Barrera mágica", "+4 de Defensa (-10 de Mana)", "Defensa", 4, 10),
-                new Movimientos("Elixir de vida", "+15 de salud (-15 de Mana)", "Salud", 15, 15)
+                new Movimientos("Poción de curación", "+15 de salud (-15 de Mana)", "Salud", 15, 15)
             };
         }
     }
