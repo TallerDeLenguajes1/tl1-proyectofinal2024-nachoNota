@@ -39,8 +39,8 @@ namespace VentanaCombate
         public void NuevoCombate()
         {
             bool turno = true;
-
-            if (elegido2 != null)
+            bool EsCombate2v2 = elegido2 != null;
+            if (EsCombate2v2)
             {
                 movimientosPorClave.Add(movimientosPorClave.Count + 1, new Movimientos("Refuerzos en camino", "Cambia con tu compañero de equipo", "Cambio", 0, 0));
             }

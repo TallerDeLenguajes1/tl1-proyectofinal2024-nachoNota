@@ -95,10 +95,10 @@ namespace MiProyecto.FabricaDePersonajes
 
             try
             {
-                HttpClient client = new HttpClient();
-/*                {
+                HttpClient client = new HttpClient
+                {
                     Timeout = TimeSpan.FromSeconds(3) //pongo 3 segundos de tiempo de espera
-                };*/
+                };
 
                 string url = $"{baseUrl}characters?comics=32477&limit=13&offset=1&ts=1&apikey={publicKey}&hash={hash}";
                 HttpResponseMessage response = await client.GetAsync(url);
